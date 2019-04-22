@@ -1,4 +1,5 @@
 from application import db
+from datetime import datetime
 
 
 class BotUser(db.Model):
@@ -7,6 +8,7 @@ class BotUser(db.Model):
     username = db.Column(db.String(100))
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
+    points = db.relationship('Point', lazy='dynamic')
 
 
 class Channel(db.Model):
@@ -44,3 +46,10 @@ class Test(db.Model):
     question = db.Column(db.String(150))
     answer_id = db.Column(db.Integer)
     options = db.relationship('Option', lazy='dynamic')
+
+
+class Point(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.Integer)
+    bot_user_id = db.Column(db.Integer, db.ForeignKey('bot_user.id'))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
