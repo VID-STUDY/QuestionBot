@@ -30,3 +30,17 @@ class Channel(db.Model):
 members = db.Table('channel_members',
                    db.Column('bot_user_id', db.Integer, db.ForeignKey('bot_user.id'), primary_key=True),
                    db.Column('channel_id', db.Integer, db.ForeignKey('channel.id'), primary_key=True))
+
+
+class Option(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.String(100))
+    is_answer = db.Column(db.Boolean, default=False)
+    test_id = db.Column(db.Integer, db.ForeignKey('test.id'))
+
+
+class Test(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(150))
+    answer_id = db.Column(db.Integer)
+    options = db.relationship('Option', lazy='dynamic')
