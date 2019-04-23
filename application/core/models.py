@@ -8,7 +8,7 @@ class BotUser(db.Model):
     username = db.Column(db.String(100))
     first_name = db.Column(db.String(100))
     last_name = db.Column(db.String(100))
-    points = db.relationship('Point', lazy='dynamic')
+    answers = db.relationship('Answer', lazy='dynamic', backref=db.backref('user', lazy=True))
 
 
 class Channel(db.Model):
@@ -46,10 +46,22 @@ class Test(db.Model):
     question = db.Column(db.String(150))
     answer_id = db.Column(db.Integer)
     options = db.relationship('Option', lazy='dynamic')
+    answers = db.relationship('Answer', lazy='dynamic')
+
+    def add_answer(self, user_id: int, answer):
+        if self.answers.filter(Answer.user_id == user_id).count() == 0:
+            self.answers.append(answer)
 
 
-class Point(db.Model):
+class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    value = db.Column(db.Integer)
-    bot_user_id = db.Column(db.Integer, db.ForeignKey('bot_user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('bot_user.id'))
+    test_id = db.Column(db.Integer, db.ForeignKey('test.id'))
+    points = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Poll:
+    def __init__(self, question: str, options: list):
+        self.question = question
+        self.options = options
