@@ -15,7 +15,9 @@ class Channel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     chat_id = db.Column(db.Integer)
     channel_name = db.Column(db.String(100))
+    channel_title = db.Column(db.String(100))
     members = db.relationship('BotUser', secondary=members, lazy='dynamic', backref=db.backref('channels', lazy=True))
+    tests = db.relationship('Test', lazy='dynamic', backref='channel')
 
     def is_member_exists(self, bot_user_id: int) -> bool:
         return self.members.filter(members.c.bot_user_id == bot_user_id).count() > 0
@@ -45,6 +47,7 @@ class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(150))
     answer_id = db.Column(db.Integer)
+    channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'))
     options = db.relationship('Option', lazy='dynamic')
     answers = db.relationship('Answer', lazy='dynamic')
 
