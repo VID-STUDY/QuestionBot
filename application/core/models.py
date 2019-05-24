@@ -2,6 +2,11 @@ from application import db
 from datetime import datetime
 
 
+members = db.Table('channel_members',
+                   db.Column('bot_user_id', db.Integer, db.ForeignKey('bot_user.id'), primary_key=True),
+                   db.Column('channel_id', db.Integer, db.ForeignKey('channel.id'), primary_key=True))
+
+
 class BotUser(db.Model):
     __tablename__ = 'bot_user'
     id = db.Column(db.Integer, primary_key=True)
@@ -19,6 +24,20 @@ class Channel(db.Model):
     members = db.relationship('BotUser', secondary=members, lazy='dynamic', backref=db.backref('channels', lazy=True))
     tests = db.relationship('Test', lazy='dynamic', backref='channel')
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'channelName': self.channel_name,
+            'channelTitle': self.channel_title
+        }
+
+    @staticmethod
+    def add(channel_name, channel_title):
+        channel = Channel(channel_name=channel_name, channel_title=channel_title)
+        db.session.add(channel)
+        db.session.commit()
+        return channel
+
     def is_member_exists(self, bot_user_id: int) -> bool:
         return self.members.filter(members.c.bot_user_id == bot_user_id).count() > 0
 
@@ -29,11 +48,6 @@ class Channel(db.Model):
     def remove_member(self, bot_user: BotUser):
         if self.is_member_exists(bot_user.id):
             self.members.remove(bot_user)
-
-
-members = db.Table('channel_members',
-                   db.Column('bot_user_id', db.Integer, db.ForeignKey('bot_user.id'), primary_key=True),
-                   db.Column('channel_id', db.Integer, db.ForeignKey('channel.id'), primary_key=True))
 
 
 class Option(db.Model):
