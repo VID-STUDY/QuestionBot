@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import AddChannel from './components/AddChannel'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   mode: 'history',
@@ -27,7 +28,8 @@ export default new Router({
     },
     {
       path: '/addChannel',
-      name: 'newChannel'
+      name: 'newChannel',
+      component: AddChannel
     }
   ]
 })
