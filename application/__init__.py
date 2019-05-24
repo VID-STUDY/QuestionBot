@@ -22,17 +22,17 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-if 'ADMIN_DEV' in os.environ or 'PRODUCTION' is os.environ:
-    # app needs the login manager only on admin developing and production
-    loginManager = LoginManager(app)
-    loginManager.login_view = 'auth.login'
-    loginManager.login_message = strings.get_string('authentication.required')
-    loginManager.login_message_category = 'error'
+loginManager = LoginManager(app)
+loginManager.login_view = 'auth.login'
+loginManager.login_message = strings.get_string('authentication.required')
+loginManager.login_message_category = 'error'
 
 import application.core.models
 
 # from application.bot import bp as bot_bp
 # app.register_blueprint(bot_bp)
+from application.api import bp as api_bp
+app.register_blueprint(api_bp, url_prefix='/api')
 
 if 'ADMIN_DEV' not in os.environ and 'PRODUCTION' not in os.environ:
     # When bot needs to be developed or tested, this configuration starts with long polling
