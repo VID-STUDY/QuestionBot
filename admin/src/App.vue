@@ -86,7 +86,7 @@
         </v-toolbar-items>
     </v-toolbar>
         <v-content>
-            <HelloWorld/>
+            <router-view/>
         </v-content>
   </v-app>
 </template>
@@ -130,18 +130,7 @@ export default {
       scrollSettings: {
           maxScrollbarLength: 160
       },
-      channels: [
-          {
-              id: 1,
-              channelName: 'questions',
-              channelTitle: 'Вопросы'
-          },
-          {
-              id: 2,
-              channelName: 'tests',
-              channelTitle: 'Тесты'
-          }
-      ]
+      channels: []
   }),
     methods: {
       getAllChannels() {
@@ -163,7 +152,10 @@ export default {
         }
     },
     created() {
-      // this.getAllChannels();
+        this.getAllChannels();
+        this.$root.$on('newChannelAdded', (newChannel) => {
+           this.channels.push(newChannel);
+        });
     },
 }
 </script>
