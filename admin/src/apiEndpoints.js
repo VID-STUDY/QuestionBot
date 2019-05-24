@@ -1,3 +1,3 @@
 export default {
-    channels: 'http://localhost:5000/api/channels'
+    channels: 'http://192.168.0.120:5000/api/channels'
 }
