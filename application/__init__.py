@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_sslify import SSLify
+from flask_cors import CORS
 from telebot import TeleBot, logger
 from application.resources import strings
 import os
@@ -18,6 +19,8 @@ app = Flask(__name__)
 if 'PRODUCTION' in os.environ:
     # if app starts in production, give it ssl-certificate
     sslify = SSLify(app)
+else:
+    cors = CORS(app)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
