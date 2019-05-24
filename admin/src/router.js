@@ -12,6 +12,22 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/channels/:name/users',
+      name: 'channelUsers'
+    },
+    {
+      path: '/channels/:name/tests',
+      name: 'channelTests'
+    },
+    {
+      path: '/channels/:name/rating',
+      name: 'channelRating'
+    },
+    {
+      path: '/addChannel',
+      name: 'newChannel'
     }
   ]
 })
