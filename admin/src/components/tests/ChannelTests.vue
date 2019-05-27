@@ -78,8 +78,8 @@
 </template>
 
 <script>
-    import axios from 'axios'
-    import apis from './../apiEndpoints'
+    import axios from 'axios/index'
+    import apis from '../../apiEndpoints'
     import Test from './Test'
     import Loading from 'vue-loading-overlay'
     import 'vue-loading-overlay/dist/vue-loading.css'

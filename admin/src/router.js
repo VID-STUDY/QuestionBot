@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import AddChannel from './components/AddChannel'
-import ChannelTest from './components/ChannelTests'
+import ChannelTest from './components/tests/ChannelTests'
 
 Vue.use(Router);
 
