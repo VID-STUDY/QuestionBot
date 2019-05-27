@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import AddChannel from './components/AddChannel'
+import ChannelTest from './components/ChannelTests'
 
 Vue.use(Router);
 
@@ -20,7 +21,9 @@ export default new Router({
     },
     {
       path: '/channels/:name/tests',
-      name: 'channelTests'
+      name: 'channelTests',
+      component: ChannelTest,
+      props: true
     },
     {
       path: '/channels/:name/rating',

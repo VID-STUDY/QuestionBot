@@ -1,5 +1,6 @@
 from application import db
 from datetime import datetime
+from typing import List
 
 
 members = db.Table('channel_members',
@@ -38,6 +39,13 @@ class Channel(db.Model):
         db.session.commit()
         return channel
 
+    @staticmethod
+    def get_tests_by_name(channel_name: str):
+        channel = Channel.query.filter(Channel.channel_name == channel_name).first()
+        if not channel:
+            return None
+        return channel.tests.all()
+
     def is_member_exists(self, bot_user_id: int) -> bool:
         return self.members.filter(members.c.bot_user_id == bot_user_id).count() > 0
 
@@ -56,6 +64,13 @@ class Option(db.Model):
     is_answer = db.Column(db.Boolean, default=False)
     test_id = db.Column(db.Integer, db.ForeignKey('test.id'))
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'value': self.value,
+            'isAnswer': self.is_answer
+        }
+
 
 class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,6 +79,16 @@ class Test(db.Model):
     channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'))
     options = db.relationship('Option', lazy='dynamic')
     answers = db.relationship('Answer', lazy='dynamic')
+
+    def to_dict(self):
+        options = self.options.all()
+        return {
+            'id': self.id,
+            'question': self.question,
+            'answer_id': self.answer_id,
+            'channel_id': self.channel_id,
+            'options': [option.to_dict() for option in options]
+        }
 
     def add_answer(self, user_id: int, answer):
         if self.answers.filter(Answer.user_id == user_id).count() == 0:
