@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import AddChannel from './components/AddChannel'
-import ChannelTest from './components/tests/ChannelTests'
+import AddChannel from './views/AddChannel'
+import ChannelTest from './views/Tests/ChannelTests'
 
 Vue.use(Router);
 

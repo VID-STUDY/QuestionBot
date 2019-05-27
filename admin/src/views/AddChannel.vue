@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-container>
         <v-layout wrap>
             <v-flex xs12>
@@ -45,8 +45,8 @@
 </template>
 
 <script>
-    import axios from 'axios'
-    import apis from './../apiEndpoints'
+    import axios from 'axios/index'
+    import apis from '../apiEndpoints'
     export default {
         name: "AddChannel",
         data: () => ({
