@@ -1,8 +1,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-container>
         <div class="vld-parent">
-            <loading :active.sync="isLoading"
-                        is-full-page="false"></loading>
+            <loading :active.sync="isLoading"> </loading>
         </div>
         <template v-if="hasError">
             <v-layout wrap>
@@ -82,7 +81,8 @@
     import axios from 'axios'
     import apis from './../apiEndpoints'
     import Test from './Test'
-    import VueLoading from "vue-loading-overlay/src/js/Component";
+    import Loading from 'vue-loading-overlay'
+    import 'vue-loading-overlay/dist/vue-loading.css'
     export default {
         name: "ChannelTests",
         props: ['name'],
@@ -118,7 +118,7 @@
         mounted() {
             this.getChannelTests();
         },
-        components: {VueLoading, Test}
+        components: {Loading, Test}
     }
 </script>
 
