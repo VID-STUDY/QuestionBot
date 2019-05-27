@@ -118,7 +118,12 @@
         mounted() {
             this.getChannelTests();
         },
-        components: {Loading, Test}
+        components: {Loading, Test},
+        watch: {
+            '$route' (to, from) {
+                this.getChannelTests();
+            }
+        }
     }
 </script>
 
