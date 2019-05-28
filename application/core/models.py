@@ -46,6 +46,10 @@ class Channel(db.Model):
             return None
         return channel.tests.all()
 
+    @staticmethod
+    def get_by_name(channel_name: str):
+        return Channel.query.filter(Channel.channel_name == channel_name).first()
+
     def is_member_exists(self, bot_user_id: int) -> bool:
         return self.members.filter(members.c.bot_user_id == bot_user_id).count() > 0
 
@@ -71,11 +75,14 @@ class Option(db.Model):
             'isAnswer': self.is_answer
         }
 
+    @staticmethod
+    def from_jsons(json_options):
+        return [Option(value=opt['value'], is_answer=opt['isAnswer']) for opt in json_options]
+
 
 class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(150))
-    answer_id = db.Column(db.Integer)
     channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'))
     options = db.relationship('Option', lazy='dynamic')
     answers = db.relationship('Answer', lazy='dynamic')
@@ -85,10 +92,22 @@ class Test(db.Model):
         return {
             'id': self.id,
             'question': self.question,
-            'answer_id': self.answer_id,
             'channel_id': self.channel_id,
             'options': [option.to_dict() for option in options]
         }
+
+    @staticmethod
+    def create(json, channel: Channel):
+        test = Test()
+        test.question = json['question']
+        new_options = Option.from_jsons(json['options'])
+        for opt in new_options:
+            test.options.append(opt)
+            db.session.add(opt)
+        channel.tests.append(test)
+        db.session.add(test)
+        db.session.commit()
+        return test
 
     def add_answer(self, user_id: int, answer):
         if self.answers.filter(Answer.user_id == user_id).count() == 0:
