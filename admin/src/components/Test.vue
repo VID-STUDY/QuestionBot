@@ -3,16 +3,18 @@
         <v-item>
             <v-card>
                 <v-card-title>
-                    <p class="headline mb-0">{{ test.question }}</p>
+                    <p class="question mb-0">{{ test.question }}</p>
                 </v-card-title>
                 <v-divider/>
                 <v-card-text>
                     <v-list subheader>
                         <v-subheader>Вариаты ответов</v-subheader>
-                        <v-list-tile v-for="option in test.options" :key="option.id">
+                        <v-list-tile v-for="option in test.options" :key="option.id" class="option-item" avatar>
+                            <v-list-tile-avatar>
+                                <v-checkbox color="primary" :disabled="!option.isAnswer" @change="checkboxChange" v-model="option.isAnswer"/>
+                            </v-list-tile-avatar>
                             <v-list-tile-content>
-                                <v-list-tile-title class="option-item">
-                                    <v-icon v-if="option.isAnswer" color="primary">done</v-icon>
+                                <v-list-tile-title class="option-item-title">
                                     {{ option.value }}
                                 </v-list-tile-title>
                             </v-list-tile-content>
@@ -41,8 +43,16 @@
     }
 </script>
 
-<style scoped>
-    p.headline {
-        font-size: 0.9rem;
+<style scoped lang="scss">
+    p.question {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+    .option-item {
+        height: 24px;
+        &-title {
+            height: 12px;
+            line-height: 12px;
+        }
     }
 </style>
