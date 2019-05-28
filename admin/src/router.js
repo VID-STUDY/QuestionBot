@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import AddChannel from './views/AddChannel'
 import ChannelTest from './views/Tests/ChannelTests'
+import NewTest from './views/Tests/NewTest'
 
 Vue.use(Router);
 
@@ -23,6 +24,12 @@ export default new Router({
       path: '/channels/:name/tests',
       name: 'channelTests',
       component: ChannelTest,
+      props: true
+    },
+    {
+      path: '/channels/:name/tests/create',
+      name: 'newTest',
+      component: NewTest,
       props: true
     },
     {

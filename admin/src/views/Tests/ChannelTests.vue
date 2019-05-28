@@ -51,6 +51,7 @@
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn
+                                :to="{name: 'newTest', params: {name: name}}"
                             fab
                             dark
                             small
