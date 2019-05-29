@@ -44,11 +44,11 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
         telegram_bot.answer_callback_query(query.id, message, show_alert=True)
         return
     right_answer = test.get_right_answer()
+    target_message_id = query.message.message_id
     # if user given right answer
     if option_id == right_answer.id:
         answers_count = test.get_count_user_answers(user.id)
         # If user given right answer on first try in top 10 players
-        target_message_id = query.message.message_id
         # TODO: check caption messages by test file path
         if query.message.caption:
             current_message_text = query.message.caption
@@ -57,31 +57,36 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
         if test.get_top_10_answers_count() < 10 and answers_count == 0:
             new_message_text = add_user_to_top_10(current_user, current_message_text)
             answer_points = settings.get_top_10_points()
-            message = strings.get_string('answer.right_answer_on_top_10')
+            message = strings.get_string('answer.right_answer_on_top_10').format(answer_points)
         else:
             if answers_count == 0:
                 # If user not in top 10, but answered on first try
                 answer_points = settings.get_first_try_points()
-                message = strings.get_string('answer.right_answer_on_the_first_try')
+                message = strings.get_string('answer.right_answer_on_the_first_try').format(answer_points)
                 new_message_text = add_user_to_first_try_answer(current_user, current_message_text)
             else:
                 # if user answered not on first try
                 answer_points = settings.get_not_first_try_points()
-                message = strings.get_string('answer.right_answer_on_the_not_first_try').format(answers_count + 1)
+                message = strings.get_string('answer.right_answer_on_the_not_first_try').format(answers_count + 1,
+                                                                                                answer_points)
                 new_message_text = None
-        answer = Answer(user_id=user.id, points=answer_points)
-        test.add_answer(answer)
-        # TODO: check caption messages by test file path
-        if query.message.caption and new_message_text:
-            telegram_bot.edit_message_caption(new_message_text,
-                                              channel_chat_id, target_message_id, parse_mode='HTML')
-        elif query.message.text and new_message_text:
-            telegram_bot.edit_message_text(new_message_text, channel_chat_id,
-                                           target_message_id, parse_mode='HTML')
-        try:
-            telegram_bot.answer_callback_query(query.id, message, show_alert=True)
-        except ApiException:
-            pass
+    else:
+        answer_points = None
+        new_message_text = None
+        message = strings.get_string('answer.wrong_answer')
+    answer = Answer(user_id=user.id, points=answer_points)
+    test.add_answer(answer)
+    # TODO: check caption messages by test file path
+    if query.message.caption and new_message_text:
+        telegram_bot.edit_message_caption(new_message_text,
+                                          channel_chat_id, target_message_id, parse_mode='HTML')
+    elif query.message.text and new_message_text:
+        telegram_bot.edit_message_text(new_message_text, channel_chat_id,
+                                       target_message_id, parse_mode='HTML')
+    try:
+        telegram_bot.answer_callback_query(query.id, message, show_alert=True)
+    except ApiException:
+        pass
 
 
 def add_user_to_top_10(user: BotUser, message_text: str) -> str:
