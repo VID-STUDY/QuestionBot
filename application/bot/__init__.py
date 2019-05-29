@@ -7,7 +7,7 @@ import os
 bp = Blueprint('bot', __name__)
 
 # Load bot's behaviors
-# from application.bot import <bot's behaviors>
+from application.bot import core
 
 if 'PRODUCTION' in os.environ:
     # When app started in production, configure Telegram webhook to receive updates
