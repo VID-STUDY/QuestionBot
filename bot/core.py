@@ -50,11 +50,12 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
         answers_count = test.get_count_user_answers(user.id)
         # If user given right answer on first try in top 10 players
         # TODO: check caption messages by test file path
+        top_10_answers_count = test.get_top_10_answers_count()
         if query.message.caption:
             current_message_text = query.message.caption
         else:
             current_message_text = query.message.text
-        if test.get_top_10_answers_count() < 10 and answers_count == 0:
+        if top_10_answers_count < 10 and answers_count == 0:
             new_message_text = add_user_to_top_10(current_user, current_message_text)
             answer_points = settings.get_top_10_points()
             message = strings.get_string('answer.right_answer_on_top_10').format(answer_points)
@@ -89,9 +90,24 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
         pass
 
 
-def add_user_to_top_10(user: BotUser, message_text: str) -> str:
-    # TODO: add username to list of top 10 players
-    pass
+def add_user_to_top_10(user: BotUser, message_text: str, top_10_counts: int) -> str:
+    top_10_str = strings.get_string('question.top_10')
+    index = message_text.index(top_10_str) + len(top_10_str)
+    result = 'error'
+    if top_10_counts == 0:
+        result = message_text[:index] + '\n1) ' + user.get_name() + message_text[index:]
+    else:
+        index = message_text.index(top_10_str) + len(top_10_str) - 1
+        users_list = message_text[index + 2:]
+        for i in range(top_10_counts + 1):
+            if users_list[0] == '\n':
+                user_index = message_text.index(user) + len(user)
+                result = message_text[:user_index] + '\n{}) {}'\
+                    .format(top_10_counts + 1, user.get_name()) + message_text[user_index:]
+                break
+            user = users_list[:users_list.index('\n')]
+            users_list = users_list[users_list.index('\n') + 1:]
+    return result
 
 
 def add_user_to_first_try_answer(user: BotUser, message_text: str) -> str:
