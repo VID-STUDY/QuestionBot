@@ -4,7 +4,7 @@ Main core for inline queries handlers
 from application import telegram_bot
 from telebot.types import CallbackQuery, User
 from telebot.apihelper import ApiException
-from application.core.models import Test, Option, Channel, BotUser, Answer
+from application.core.models import Test, Channel, BotUser, Answer
 from application.resources import strings
 import settings
 
@@ -44,19 +44,12 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
         telegram_bot.answer_callback_query(query.id, message, show_alert=True)
         return
     right_answer = test.get_right_answer()
-    target_message_id = query.message.message_id
     # if user given right answer
     if option_id == right_answer.id:
         answers_count = test.get_count_user_answers(user.id)
         # If user given right answer on first try in top 10 players
-        # TODO: check caption messages by test file path
         top_10_answers_count = test.get_top_10_answers_count()
-        if query.message.caption:
-            current_message_text = query.message.caption
-        else:
-            current_message_text = query.message.text
         if top_10_answers_count < 10 and answers_count == 0:
-            new_message_text = add_user_to_top_10(current_user, current_message_text)
             answer_points = settings.get_top_10_points()
             message = strings.get_string('answer.right_answer_on_top_10').format(answer_points)
         else:
@@ -64,52 +57,17 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
                 # If user not in top 10, but answered on first try
                 answer_points = settings.get_first_try_points()
                 message = strings.get_string('answer.right_answer_on_the_first_try').format(answer_points)
-                new_message_text = add_user_to_first_try_answer(current_user, current_message_text)
             else:
                 # if user answered not on first try
                 answer_points = settings.get_not_first_try_points()
                 message = strings.get_string('answer.right_answer_on_the_not_first_try').format(answers_count + 1,
                                                                                                 answer_points)
-                new_message_text = None
     else:
         answer_points = None
-        new_message_text = None
         message = strings.get_string('answer.wrong_answer')
     answer = Answer(user_id=user.id, points=answer_points)
     test.add_answer(answer)
-    # TODO: check caption messages by test file path
-    if query.message.caption and new_message_text:
-        telegram_bot.edit_message_caption(new_message_text,
-                                          channel_chat_id, target_message_id, parse_mode='HTML')
-    elif query.message.text and new_message_text:
-        telegram_bot.edit_message_text(new_message_text, channel_chat_id,
-                                       target_message_id, parse_mode='HTML')
     try:
         telegram_bot.answer_callback_query(query.id, message, show_alert=True)
     except ApiException:
         pass
-
-
-def add_user_to_top_10(user: BotUser, message_text: str, top_10_counts: int) -> str:
-    top_10_str = strings.get_string('question.top_10')
-    index = message_text.index(top_10_str) + len(top_10_str)
-    result = 'error'
-    if top_10_counts == 0:
-        result = message_text[:index] + '\n1) ' + user.get_name() + message_text[index:]
-    else:
-        index = message_text.index(top_10_str) + len(top_10_str) - 1
-        users_list = message_text[index + 2:]
-        for i in range(top_10_counts + 1):
-            if users_list[0] == '\n':
-                user_index = message_text.index(user) + len(user)
-                result = message_text[:user_index] + '\n{}) {}'\
-                    .format(top_10_counts + 1, user.get_name()) + message_text[user_index:]
-                break
-            user = users_list[:users_list.index('\n')]
-            users_list = users_list[users_list.index('\n') + 1:]
-    return result
-
-
-def add_user_to_first_try_answer(user: BotUser, message_text: str) -> str:
-    # TODO: add username to list of first try answers
-    pass
