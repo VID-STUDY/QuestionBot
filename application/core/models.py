@@ -38,7 +38,7 @@ class Channel(db.Model):
     channel_name = db.Column(db.String(100))
     channel_title = db.Column(db.String(100))
     members = db.relationship('BotUser', secondary=members, lazy='dynamic', backref=db.backref('channels', lazy=True))
-    tests = db.relationship('Test', lazy='dynamic', backref='channel')
+    quizzes = db.relationship('Quiz', lazy='dynamic', backref='channel')
 
     def to_dict(self):
         return {
@@ -102,7 +102,7 @@ class Option(db.Model):
 class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(150))
-    channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'))
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
     options = db.relationship('Option', lazy='dynamic')
     answers = db.relationship('Answer', lazy='dynamic')
 
@@ -111,19 +111,18 @@ class Test(db.Model):
         return {
             'id': self.id,
             'question': self.question,
-            'channel_id': self.channel_id,
             'options': [option.to_dict() for option in options]
         }
 
     @staticmethod
-    def create(json, channel: Channel):
+    def create(json, quiz):
         test = Test()
         test.question = json['question']
         new_options = Option.from_jsons(json['options'])
         for opt in new_options:
             test.options.append(opt)
             db.session.add(opt)
-        channel.tests.append(test)
+        quiz.tests.append(test)
         db.session.add(test)
         db.session.commit()
         return test
@@ -158,6 +157,38 @@ class Test(db.Model):
         return self.answers.query.filter(Answer.user_id == user_id
                                          and (Answer.points == top_10_points
                                               or Answer.points == first_try_points)).count() > 0
+
+
+class Quiz(db.Model):
+    __tablename__ = 'quizzes'
+    id = db.Column(db.Integer, primary_key=True)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    top_count = db.Column(db.Integer)
+    channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'))
+    tests = db.relationship('Test', lazy='dynamic', backref='quiz')
+
+    def to_dict(self):
+        tests = self.tests.all()
+        return {
+            'id': self.id,
+            'startDate': self.start_date,
+            'endDate': self.end_date,
+            'topCount': self.top_count,
+            'channelId': self.channel_id,
+            'tests': [t.to_dict() for t in tests]
+        }
+
+    @staticmethod
+    def create(json: dict, channel: Channel):
+        new_quiz = Quiz()
+        new_quiz.start_date = datetime.strptime(json['startDate'], '%d.%m.%Y')
+        new_quiz.end_date = datetime.strptime(json['endDate'], '%d.%m.%Y')
+        new_quiz.top_count = json['topCount']
+        channel.quizzes.append(new_quiz)
+        db.session.add(new_quiz)
+        db.session.commit()
+        return new_quiz
 
 
 class Answer(db.Model):
