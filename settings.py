@@ -6,40 +6,22 @@ import os
 filename = os.path.join(basedir, 'settings.data')
 
 
-def get_top_10_points() -> int:
+def _get_value(key: str):
     settings = shelve.open(filename)
-    value = settings['top_10_points']
+    value = settings[key]
     settings.close()
     return value
 
 
-def get_first_try_points() -> int:
+def _set_value(key: str, value):
     settings = shelve.open(filename)
-    value = settings['first_try_points']
-    settings.close()
-    return value
-
-
-def get_not_first_try_points() -> int:
-    settings = shelve.open(filename)
-    value = settings['not_first_try_points']
-    settings.close()
-    return value
-
-
-def set_top_10_points(points: int):
-    settings = shelve.open(filename)
-    settings['top_10_points'] = points
+    settings[key] = value
     settings.close()
 
 
-def set_first_try_points(points: int):
-    settings = shelve.open(filename)
-    settings['first_try_points'] = points
-    settings.close()
+def get_right_answer_points() -> int:
+    return _get_value('right_answer_points')
 
 
-def set_not_first_try_points(points: int):
-    settinsg = shelve.open(filename)
-    settinsg['not_first_try_points'] = points
-    settinsg.close()
+def set_right_answer_points():
+    _set_value('right_answer_points')
