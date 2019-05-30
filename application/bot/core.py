@@ -47,23 +47,18 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     # if user given right answer
     if option_id == right_answer.id:
         answers_count = test.get_count_user_answers(user.id)
-        # If user given right answer on first try in top 10 players
-        top_10_answers_count = test.get_top_10_answers_count()
-        if top_10_answers_count < 10 and answers_count == 0:
-            answer_points = settings.get_top_10_points()
-            message = strings.get_string('answer.right_answer_on_top_10').format(answer_points)
+        # If user given right answer on first try
+        if answers_count == 0:
+            # If user not in top 10, but answered on first try
+            answer_points = settings.get_right_answer_points()
+            message = strings.get_string('answer.right_answer_on_the_first_try').format(answer_points)
         else:
-            if answers_count == 0:
-                # If user not in top 10, but answered on first try
-                answer_points = settings.get_first_try_points()
-                message = strings.get_string('answer.right_answer_on_the_first_try').format(answer_points)
-            else:
-                # if user answered not on first try
-                answer_points = settings.get_not_first_try_points()
-                message = strings.get_string('answer.right_answer_on_the_not_first_try').format(answers_count + 1,
-                                                                                                answer_points)
+            # if user answered not on first try
+            answer_points = 0
+            message = strings.get_string('answer.right_answer_on_the_not_first_try').format(answers_count + 1,
+                                                                                            answer_points)
     else:
-        answer_points = None
+        answer_points = 0
         message = strings.get_string('answer.wrong_answer')
     answer = Answer(user_id=user.id, points=answer_points)
     test.add_answer(answer)
