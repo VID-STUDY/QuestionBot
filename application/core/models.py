@@ -142,21 +142,9 @@ class Test(db.Model):
     def get_right_answer(self) -> Option:
         return self.options.filter(Option.is_answer == True).first()
 
-    def get_count_of_first_try_answers(self):
-        top_10_points = settings.get_top_10_points()
-        first_try_points = settings.get_first_try_points()
-        return self.answers.query(Answer.points == top_10_points or Answer.points == first_try_points).count()
-
-    def get_top_10_answers_count(self):
-        top_10_points = settings.get_top_10_points()
-        return self.answers.query(Answer.points == top_10_points).count()
-
     def user_given_right_answer(self, user_id):
-        top_10_points = settings.get_top_10_points()
-        first_try_points = settings.get_first_try_points()
-        return self.answers.query.filter(Answer.user_id == user_id
-                                         and (Answer.points == top_10_points
-                                              or Answer.points == first_try_points)).count() > 0
+        right_answer_points = settings.get_right_answer_points()
+        return self.answers.query.filter(Answer.user_id == user_id and Answer.points == right_answer_points).count() > 0
 
 
 class Quiz(db.Model):
