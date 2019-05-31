@@ -1,6 +1,7 @@
 from application import db
 from datetime import datetime
 import settings
+from application.utils import date as dateutils
 
 members = db.Table('channel_members',
                    db.Column('bot_user_id', db.Integer, db.ForeignKey('bot_user.id'), primary_key=True),
@@ -103,6 +104,7 @@ class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(150))
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
+    publish_date = db.Column(db.DateTime)
     options = db.relationship('Option', lazy='dynamic')
     answers = db.relationship('Answer', lazy='dynamic')
 
@@ -111,6 +113,7 @@ class Test(db.Model):
         return {
             'id': self.id,
             'question': self.question,
+            'publishDate': self.publish_date,
             'options': [option.to_dict() for option in options]
         }
 
@@ -118,6 +121,7 @@ class Test(db.Model):
     def create(json, quiz):
         test = Test()
         test.question = json['question']
+        test.publish_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['publishDate'], '%d.%m.%Y'))
         new_options = Option.from_jsons(json['options'])
         for opt in new_options:
             test.options.append(opt)
@@ -170,8 +174,8 @@ class Quiz(db.Model):
     @staticmethod
     def create(json: dict, channel: Channel):
         new_quiz = Quiz()
-        new_quiz.start_date = datetime.strptime(json['startDate'], '%d.%m.%Y')
-        new_quiz.end_date = datetime.strptime(json['endDate'], '%d.%m.%Y')
+        new_quiz.start_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['startDate'], '%d.%m.%Y'))
+        new_quiz.end_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['endDate'], '%d.%m.%Y'))
         new_quiz.top_count = json['topCount']
         channel.quizzes.append(new_quiz)
         db.session.add(new_quiz)
