@@ -6,6 +6,7 @@ from telebot.types import CallbackQuery, User
 from telebot.apihelper import ApiException
 from application.core.models import Test, Channel, BotUser, Answer
 from application.resources import strings
+from datetime import datetime
 import settings
 
 
@@ -38,6 +39,12 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     current_user = BotUser.add_user(user.id, user.first_name, user.last_name, user.username)
     channel.add_member(current_user)
     test = Test.get_by_id(test_id)
+    # Check if user given an answer for current quiz
+    now_utc = datetime.utcnow()
+    if now_utc > test.quiz.end_date:
+        message = strings.get_string('answer.quiz_already_ended')
+        telegram_bot.answer_callback_query(query.id, message, show_alert=True)
+        return
     if test.user_given_right_answer(user_id=current_user.id):
         # if user already given the right answer send message to him and stop processing
         message = strings.get_string('answer.already_given')
