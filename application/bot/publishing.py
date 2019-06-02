@@ -1,5 +1,5 @@
 from application import telegram_bot
-from application.core.models import Test
+from application.core.models import Test, Channel, Answer
 from application.resources import strings, keyboards
 import os
 
@@ -36,3 +36,4 @@ def publish_test(test_id: int):
                                        reply_markup=keyboard, parse_mode='HTML')
     else:
         telegram_bot.send_message(channel_chat_id, test_message, reply_markup=keyboard, parse_mode='HTML')
+    test.make_published()
