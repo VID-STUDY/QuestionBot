@@ -106,6 +106,7 @@ class Test(db.Model):
     question = db.Column(db.String(150))
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
     publish_date = db.Column(db.DateTime)
+    file_path = db.Column(db.String(150))
     options = db.relationship('Option', lazy='dynamic')
     answers = db.relationship('Answer', lazy='dynamic')
 
