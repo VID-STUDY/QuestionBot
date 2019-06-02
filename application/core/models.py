@@ -149,6 +149,27 @@ class Test(db.Model):
     @staticmethod
     def get_by_id(test_id: int):
         return Test.query.get(test_id)
+    
+    @staticmethod
+    def update(test_id; int, json: dict):
+        test = Test.get_by_id(test_id)
+        test.question = json['question']
+        test.publish_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['publishDate'], '%d.%m.%Y'))
+        new_options = Option.from_jsons(json['options'])
+        current_options = test.options.all()
+        for option in current_options:
+            db.session.delete(option)
+        for opt in new_options:
+            test.options.append(opt)
+            db.session.add(opt)
+        db.session.commit()
+        return test
+    
+    @staticmethod
+    def remove(test_id: int):
+        db.session.delete(Test.get_by_id(test_id))
+        db.session.commit()
+
 
     def add_answer(self, answer):
         self.answers.append(answer)
@@ -218,6 +239,13 @@ class Quiz(db.Model):
     @staticmethod
     def get_by_id(quiz_id: int):
         return Quiz.query.get(quiz_id)
+    
+    @staticmethod
+    def get_tests_by_quiz_id(quiz_id: int)
+        quiz = Quiz.get_by_id(quiz_id)
+        if not quiz:
+            return None
+        return quiz.tests.all()
 
     def get_published_tests(self):
         return self.tests.filter(Test.published == True).all()
