@@ -4,8 +4,15 @@
       :clipped="drawer.clipped"
       :fixed="drawer.fixed"
       v-model="drawer.open"
+      width="260"
       app
     >
+    <v-toolbar color="primary darken-1" dark>
+        <img :src="computeLogo" height="36">
+        <v-toolbar-title class="ml-0 pl-3 hidden-md-and-down">
+            <span>QuestionBot</span>
+        </v-toolbar-title>
+    </v-toolbar>
       <vue-perfect-scrollbar class="drawer-menu&#45;&#45;scroll" :settings="scrollSettings">
           <v-list dense expand subheader>
               <v-subheader>Каналы</v-subheader>
@@ -132,6 +139,11 @@ export default {
       },
       channels: []
   }),
+    computed: {
+        computeLogo() {
+            return '/static/logo.png'
+        }
+    },
     methods: {
       getAllChannels() {
           axios.get(apiEndpoints.channels).then(({data}) => {
