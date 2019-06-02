@@ -2,6 +2,7 @@ from application import db
 from datetime import datetime
 import settings
 from application.utils import date as dateutils
+from sqlalchemy import func
 
 members = db.Table('channel_members',
                    db.Column('bot_user_id', db.Integer, db.ForeignKey('bot_user.id'), primary_key=True),
@@ -195,6 +196,14 @@ class Answer(db.Model):
     test_id = db.Column(db.Integer, db.ForeignKey('test.id'))
     points = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    channel_id = db.Column(db.Integer)
+
+    @staticmethod
+    def get_summary_user_points_by_channel_and_period(channel_id: int, start_date: datetime, end_date: datetime):
+        points_by_users = db.query(BotUser.first_name, func.sum(Answer.points))\
+            .filter(Answer.channel_id == channel_id and (start_date <= Answer.created_at <= end_date))\
+            .group_by(BotUser.first_name).all()
+        return points_by_users
 
 
 class Poll:
