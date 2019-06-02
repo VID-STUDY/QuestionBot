@@ -5,7 +5,15 @@ import os
 
 
 def publish_rating():
-    pass
+    channels = Channel.query.all()
+    for channel in channels:
+        quiz = channel.get_current_quiz()
+        if quiz:
+            user_points = Answer.get_summary_user_points_by_channel_and_period(channel.id,
+                                                                               quiz.start_date,
+                                                                               quiz.end_date)
+            rating_message = strings.from_user_points_rating(user_points, quiz.start_date, quiz.end_date)
+            telegram_bot.send_message(channel.chat_id, rating_message, reply_markup='HTML')
 
 
 def publish_test(test_id: int):
