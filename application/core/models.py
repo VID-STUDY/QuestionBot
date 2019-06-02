@@ -44,13 +44,14 @@ class Channel(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'chatId': self.chat_id,
             'channelName': self.channel_name,
             'channelTitle': self.channel_title
         }
 
     @staticmethod
-    def add(channel_name, channel_title):
-        channel = Channel(channel_name=channel_name, channel_title=channel_title)
+    def add(channel_name, channel_title, chat_id):
+        channel = Channel(channel_name=channel_name, channel_title=channel_title, chat_id=chat_id)
         db.session.add(channel)
         db.session.commit()
         return channel

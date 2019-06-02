@@ -1,3 +1,4 @@
+from application import telegram_bot
 from application.api import bp
 from application import telegram_bot
 from application.core.models import Channel
@@ -24,7 +25,13 @@ def add_channel():
     if channel.type != 'channel':
         error = apiutils.error_message(400, 'Указанный юзернейм не является каналом')
         return jsonify(error), 400
-    new_channel = Channel.add(channel.username, channel.title)
+    try:
+        sent_message = telegram_bot.send_message(channel_name, 'Test')
+        telegram_bot.delete_message(sent_message.chat.id, sent_message.message_id)
+    except ApiException:
+        error = apiutils.error_message(400, 'Бот не имеет доступа к отправке и удалению сообщений')
+        return jsonify(error), 400
+    new_channel = Channel.add(channel.username, channel.title, sent_message.chat.id)
     return jsonify(new_channel.to_dict()), 200
 
 
