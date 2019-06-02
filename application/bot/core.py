@@ -67,7 +67,7 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     else:
         answer_points = 0
         message = strings.get_string('answer.wrong_answer')
-    answer = Answer(user_id=user.id, points=answer_points)
+    answer = Answer(user_id=user.id, points=answer_points, channel_id=channel.id)
     test.add_answer(answer)
     try:
         telegram_bot.answer_callback_query(query.id, message, show_alert=True)
