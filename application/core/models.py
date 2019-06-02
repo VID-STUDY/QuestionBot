@@ -71,6 +71,13 @@ class Channel(db.Model):
     @staticmethod
     def get_by_chat_id(channel_chat_id: int):
         return Channel.query.filter(Channel.chat_id == channel_chat_id)
+    
+    @staticmethod
+    def get_quizzes_by_channel_name(channel_name: str):
+        channel = Channel.get_by_name(channel_name)
+        if not channel:
+            return None
+        return channel.quizzes.all()
 
     def is_member_exists(self, bot_user_id: int) -> bool:
         return self.members.filter(members.c.bot_user_id == bot_user_id).count() > 0
@@ -193,6 +200,24 @@ class Quiz(db.Model):
         db.session.add(new_quiz)
         db.session.commit()
         return new_quiz
+    
+    @staticmethod
+    def update(quiz_id: int, json: dict):
+        quiz = Quiz.get_by_id(quiz_id)
+        quiz.startDate = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['startDate'], '%d.%m.%Y'))
+        quiz.end_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['endDate'], '%d.%m.%Y'))
+        quiz.top_count = json['topCount']
+        db.session.commit()
+        return quiz
+    
+    @staticmethod
+    def remove(quiz_id: int):
+        db.session.delete(Quiz.query.get(quiz_id))
+        db.session.commit()
+    
+    @staticmethod
+    def get_by_id(quiz_id: int):
+        return Quiz.query.get(quiz_id)
 
     def get_published_tests(self):
         return self.tests.filter(Test.published == True).all()
