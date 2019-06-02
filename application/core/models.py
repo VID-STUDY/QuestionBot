@@ -82,6 +82,10 @@ class Channel(db.Model):
         if self.is_member_exists(bot_user.id):
             self.members.remove(bot_user)
 
+    def get_current_quiz(self):
+        now = datetime.utcnow()
+        return self.quizzes.filter(Quiz.start_date <= now <= Quiz.end_date).first()
+
 
 class Option(db.Model):
     id = db.Column(db.Integer, primary_key=True)
