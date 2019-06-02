@@ -112,6 +112,7 @@ class Test(db.Model):
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
     publish_date = db.Column(db.DateTime)
     file_path = db.Column(db.String(150))
+    published = db.Column(db.Boolean, default=False)
     options = db.relationship('Option', lazy='dynamic')
     answers = db.relationship('Answer', lazy='dynamic')
 
@@ -157,6 +158,10 @@ class Test(db.Model):
         right_answer_points = settings.get_right_answer_points()
         return self.answers.query.filter(Answer.user_id == user_id and Answer.points == right_answer_points).count() > 0
 
+    def make_published(self):
+        self.published = True
+        db.session.commit()
+
 
 class Quiz(db.Model):
     __tablename__ = 'quizzes'
@@ -188,6 +193,9 @@ class Quiz(db.Model):
         db.session.add(new_quiz)
         db.session.commit()
         return new_quiz
+
+    def get_published_tests(self):
+        return self.tests.filter(Test.published == True).all()
 
 
 class Answer(db.Model):
