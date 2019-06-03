@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import AddChannel from './views/AddChannel'
-import ChannelTest from './views/Tests/ChannelTests'
-import NewTest from './views/Tests/NewTest'
+import Channel from './views/Channels/Cahnnel'
+import AddChannel from './views/Channels/AddChannel'
+import CahnnelMembers from './views/Channels/CahnnelMembers'
+import ChannelRating from './views/Channels/ChannelRating'
+import EditQuiz from './views/Quizzes/EditQuiz'
+import NewQuiz from './views/Quizzes/NewQuiz'
+import QuizzesList from './views/Quizzes/QuizzesList'
 
 Vue.use(Router);
 
@@ -17,27 +21,43 @@ export default new Router({
       component: Home
     },
     {
-      path: '/channels/:name/users',
-      name: 'channelUsers'
+      path: '/channel/:name', 
+      component: Channel,
+      children: [
+        {
+          path: 'quizzes',
+          name: 'channelQuizzes',
+          component: QuizzesList,
+          props: true
+        },
+        {
+          path: 'quizzes/new',
+          name: 'newQuiz',
+          component: NewQuiz,
+          props: true
+        },
+        {
+          path: 'quiz/:id',
+          name: 'editQuiz',
+          component: EditQuiz,
+          props: true
+        },
+        {
+          path: 'users',
+          name: 'channelUsers',
+          component: CahnnelMembers,
+          props: true
+        },
+        {
+          path: 'rating',
+          name: 'channelRating',
+          component: ChannelRating,
+          props: true
+        }
+      ]
     },
     {
-      path: '/channels/:name/tests',
-      name: 'channelTests',
-      component: ChannelTest,
-      props: true
-    },
-    {
-      path: '/channels/:name/tests/create',
-      name: 'newTest',
-      component: NewTest,
-      props: true
-    },
-    {
-      path: '/channels/:name/rating',
-      name: 'channelRating'
-    },
-    {
-      path: '/addChannel',
+      path: '/channels/new',
       name: 'newChannel',
       component: AddChannel
     }
