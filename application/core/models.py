@@ -130,6 +130,7 @@ class Test(db.Model):
             'question': self.question,
             'publishDate': self.publish_date.strftime('%d.%m.%Y'),
             'options': [option.to_dict() for option in options],
+            'answersCount': self.answers.count()
         }
 
     @staticmethod
