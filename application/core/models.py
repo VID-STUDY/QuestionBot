@@ -128,8 +128,8 @@ class Test(db.Model):
         return {
             'id': self.id,
             'question': self.question,
-            'publishDate': self.publish_date,
-            'options': [option.to_dict() for option in options]
+            'publishDate': self.publish_date.strftime('%d.%m.%Y'),
+            'options': [option.to_dict() for option in options],
         }
 
     @staticmethod
@@ -204,8 +204,8 @@ class Quiz(db.Model):
         tests = self.tests.all()
         return {
             'id': self.id,
-            'startDate': self.start_date,
-            'endDate': self.end_date,
+            'startDate': self.start_date.strftime('%d.%m.%Y'),
+            'endDate': self.end_date.strftime('%d.%m.%Y'),
             'topCount': self.top_count,
             'channelId': self.channel_id,
             'tests': [t.to_dict() for t in tests]
