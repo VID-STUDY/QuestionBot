@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
 import 'vuetify/src/stylus/app.styl'
 import colors from 'vuetify/es5/util/colors'
+import { Ripple } from 'vuetify/lib/directives'
 
 Vue.use(Vuetify, {
   iconfont: 'md',
@@ -12,5 +13,8 @@ Vue.use(Vuetify, {
     info: '#2196f3',
     success: '#4caf50',
     warning: '#ffc107'
+  },
+  directives:{
+    Ripple
   }
 });
