@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Channel from './views/Channels/Cahnnel'
+import Channel from './views/Channels/Channel'
 import AddChannel from './views/Channels/AddChannel'
-import CahnnelMembers from './views/Channels/CahnnelMembers'
+import ChannelMembers from './views/Channels/ChannelMembers'
 import ChannelRating from './views/Channels/ChannelRating'
 import EditQuiz from './views/Quizzes/EditQuiz'
 import NewQuiz from './views/Quizzes/NewQuiz'
@@ -23,6 +23,7 @@ export default new Router({
     {
       path: '/channel/:name', 
       component: Channel,
+      props: true,
       children: [
         {
           path: 'quizzes',
@@ -45,7 +46,7 @@ export default new Router({
         {
           path: 'users',
           name: 'channelUsers',
-          component: CahnnelMembers,
+          component: ChannelMembers,
           props: true
         },
         {
