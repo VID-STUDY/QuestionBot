@@ -46,7 +46,7 @@
 
 <script>
     import axios from 'axios/index'
-    import apis from '../apiEndpoints'
+    import apis from '../../apiEndpoints'
     export default {
         name: "AddChannel",
         data: () => ({
