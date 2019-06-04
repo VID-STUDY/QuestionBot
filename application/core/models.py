@@ -152,7 +152,7 @@ class Test(db.Model):
         return Test.query.get(test_id)
     
     @staticmethod
-    def update(test_id; int, json: dict):
+    def update(test_id: int, json: dict):
         test = Test.get_by_id(test_id)
         test.question = json['question']
         test.publish_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['publishDate'], '%d.%m.%Y'))
@@ -242,7 +242,7 @@ class Quiz(db.Model):
         return Quiz.query.get(quiz_id)
     
     @staticmethod
-    def get_tests_by_quiz_id(quiz_id: int)
+    def get_tests_by_quiz_id(quiz_id: int):
         quiz = Quiz.get_by_id(quiz_id)
         if not quiz:
             return None
