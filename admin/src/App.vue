@@ -37,7 +37,7 @@
                             <v-list-tile-title>Пользователи</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
-                    <v-list-tile :to="{ name: 'channelTests', params: { name: channel.channelName } }">
+                    <v-list-tile :to="{ name: 'channelQuizzes', params: { name: channel.channelName } }">
                         <v-list-tile-action>
                             <v-icon>assignment</v-icon>
                         </v-list-tile-action>
