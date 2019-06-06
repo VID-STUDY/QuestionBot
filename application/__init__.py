@@ -32,8 +32,8 @@ loginManager.login_message_category = 'error'
 
 import application.core.models
 
-# from application.bot import bp as bot_bp
-# app.register_blueprint(bot_bp)
+from application.bot import bp as bot_bp
+app.register_blueprint(bot_bp)
 from application.api import bp as api_bp
 app.register_blueprint(api_bp, url_prefix='/api')
 
