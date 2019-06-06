@@ -5,7 +5,6 @@ import Channel from './views/Channels/Channel'
 import AddChannel from './views/Channels/AddChannel'
 import ChannelMembers from './views/Channels/ChannelMembers'
 import ChannelRating from './views/Channels/ChannelRating'
-import EditQuiz from './views/Quizzes/EditQuiz'
 import NewQuiz from './views/Quizzes/NewQuiz'
 import QuizzesList from './views/Quizzes/QuizzesList'
 
@@ -35,12 +34,6 @@ export default new Router({
           path: 'quizzes/new',
           name: 'newQuiz',
           component: NewQuiz,
-          props: true
-        },
-        {
-          path: 'quiz/:id',
-          name: 'editQuiz',
-          component: EditQuiz,
           props: true
         },
         {
