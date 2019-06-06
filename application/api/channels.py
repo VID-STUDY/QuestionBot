@@ -26,7 +26,7 @@ def add_channel():
         error = apiutils.error_message(400, 'Указанный юзернейм не является каналом')
         return jsonify(error), 400
     try:
-        sent_message = telegram_bot.send_message(channel_name, 'Test')
+        sent_message = telegram_bot.send_message(channel_name, 'Test', disable_notification=True)
         telegram_bot.delete_message(sent_message.chat.id, sent_message.message_id)
     except ApiException:
         error = apiutils.error_message(400, 'Бот не имеет доступа к отправке и удалению сообщений')
