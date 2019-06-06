@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from application.utils import files
 from config import Config
 import os
+from sqlalchemy import and_
 
 members = db.Table('channel_members',
                    db.Column('bot_user_id', db.Integer, db.ForeignKey('bot_user.id'), primary_key=True),
@@ -74,7 +75,7 @@ class Channel(db.Model):
 
     @staticmethod
     def get_by_chat_id(channel_chat_id: int):
-        return Channel.query.filter(Channel.chat_id == channel_chat_id)
+        return Channel.query.filter(Channel.chat_id == channel_chat_id).first()
     
     @staticmethod
     def get_quizzes_by_channel_name(channel_name: str):
@@ -207,7 +208,7 @@ class Test(db.Model):
 
     def user_given_right_answer(self, user_id):
         right_answer_points = settings.get_right_answer_points()
-        return self.answers.query.filter(Answer.user_id == user_id and Answer.points == right_answer_points).count() > 0
+        return self.answers.filter(and_(Answer.user_id == user_id, Answer.is_right == True)).count() > 0
 
     def make_published(self):
         self.published = True
@@ -279,6 +280,7 @@ class Answer(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('bot_user.id'))
     test_id = db.Column(db.Integer, db.ForeignKey('test.id'))
     points = db.Column(db.Integer)
+    is_right = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     channel_id = db.Column(db.Integer)
 
