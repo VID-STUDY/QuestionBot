@@ -23,5 +23,5 @@ def get_right_answer_points() -> int:
     return _get_value('right_answer_points')
 
 
-def set_right_answer_points():
-    _set_value('right_answer_points')
+def set_right_answer_points(points):
+    _set_value('right_answer_points', points)
