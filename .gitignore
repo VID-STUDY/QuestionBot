@@ -126,3 +126,6 @@ dmypy.json
 
 # Data directory
 data/
+
+# Settings file
+settings.data
