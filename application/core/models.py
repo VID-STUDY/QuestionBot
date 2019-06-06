@@ -97,7 +97,7 @@ class Channel(db.Model):
 
     def get_current_quiz(self):
         now = datetime.utcnow()
-        return self.quizzes.filter(Quiz.start_date <= now <= Quiz.end_date).first()
+        return self.quizzes.filter(and_(Quiz.start_date <= now, now <= Quiz.end_date)).first()
 
 
 class Option(db.Model):
