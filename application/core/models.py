@@ -286,11 +286,14 @@ class Answer(db.Model):
 
     @staticmethod
     def get_summary_user_points_by_channel_and_period(channel_id: int, start_date: datetime, end_date: datetime):
-        # TODO: Переписать запрос. Фильтровать от большего к меньшему. Установить лимит
-        points_by_users = db.query(BotUser.first_name, func.sum(Answer.points))\
-            .filter(Answer.channel_id == channel_id and (start_date <= Answer.created_at <= end_date))\
-            .group_by(BotUser.first_name).all()
-        return points_by_users
+        from sqlalchemy.sql import text
+        start_date_str = start_date.strftime('%Y-%m-%d')
+        end_date_str = end_date.strftime('%Y-%m-%d')
+        sql = text("""SELECT bot_user.username, SUM(a.points) FROM bot_user 
+        LEFT JOIN answer a on bot_user.id = a.user_id 
+        WHERE (a.created_at BETWEEN :start AND :end) AND (a.channel_id = :id) GROUP BY bot_user.username""")
+        result = db.engine.execute(sql, start=start_date_str, end=end_date_str, id=channel_id)
+        return [(row[0], row[1]) for row in result]
 
 
 class Poll:
