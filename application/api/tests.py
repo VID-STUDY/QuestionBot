@@ -2,13 +2,14 @@ from application.api import bp
 from application.core.models import Test, Quiz
 from application.utils import api as apiutils
 from flask import jsonify, request
+from application.core import schedule
 
 
 @bp.route('/tests', methods=['POST'])
 def create_test():
     data = request.get_json()
-    print(data)
     new_test = Test.create(data)
+    schedule.add_test_to_publish(new_test.id, new_test.publish_date)
     return jsonify(new_test.to_dict()), 200
 
 
