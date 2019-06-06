@@ -118,8 +118,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#PyCharm cache
+# PyCharm cache
 .idea/
 
-#VS Code cache
+# VS Code cache
 .vscode/
+
+# Data directory
+data/
