@@ -135,7 +135,7 @@ export default {
     startDateFormatted: "",
     endDateFormatted: "",
     topCount: 10,
-    isLoading: "",
+    isLoading: false,
     snackbar: false,
     snackbarText: ""
   }),
@@ -153,12 +153,12 @@ export default {
       };
       const lessThenEndDateRule = value => {
         if (this.endDate !== "" && value !== "") {
-          let dateValue = new Date(value);
+          let dateValue = new Date(this.parseDate(value));
           let endDateValue = new Date(this.endDate);
           return dateValue < endDateValue || "Дата начала должна быть раньше, чем дата конца";
         }
         return true;
-      }
+      };
       rules.push(requiredRule);
       rules.push(lessThenEndDateRule);
       return rules;
@@ -170,12 +170,12 @@ export default {
       };
       const moreThanStartDateRule = value => {
         if (this.startDate !== "" && value !== "") {
-          let dateValue = new Date(value);
+          let dateValue = new Date(this.parseDate(value));
           let startDateValue = new Date(this.startDate);
           return dateValue > startDateValue || "Дата окончания должна быть позже, чем дата начала";
         }
         return true;
-      }
+      };
       rules.push(requiredRule);
       rules.push(moreThanStartDateRule);
       return rules;
