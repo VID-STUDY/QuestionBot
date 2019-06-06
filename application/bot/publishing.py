@@ -13,7 +13,7 @@ def publish_rating():
                                                                                quiz.start_date,
                                                                                quiz.end_date)
             rating_message = strings.from_user_points_rating(user_points, quiz.start_date, quiz.end_date)
-            telegram_bot.send_message(channel.chat_id, rating_message, reply_markup='HTML')
+            telegram_bot.send_message(channel.chat_id, rating_message, parse_mode='HTML')
 
 
 def publish_test(test_id: int):
@@ -22,7 +22,7 @@ def publish_test(test_id: int):
     test_message = strings.from_test(test)
     keyboard = keyboards.from_test_options(test.options.all())
     if test.file_path:
-        file = open(test.file_path, 'r')
+        file = open(test.file_path, 'rb')
         _, file_ext = os.path.splitext(test.file_path)
         if file_ext in ['.jpg', '.png']:
             telegram_bot.send_photo(channel_chat_id,
