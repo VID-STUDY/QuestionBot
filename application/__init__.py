@@ -42,3 +42,10 @@ if 'ADMIN_DEV' not in os.environ and 'PRODUCTION' not in os.environ:
     logger.setLevel(logging.DEBUG)
     telegram_bot.remove_webhook()
     telegram_bot.polling(none_stop=True)
+
+
+@app.shell_context_processor
+def shell_context():
+    return {
+        'db': db
+    }
