@@ -7,10 +7,9 @@
       width="260"
       app
     >
-    <v-toolbar color="primary darken-1" dark>
-        <img :src="computeLogo" height="36">
-        <v-toolbar-title class="ml-0 pl-3 hidden-md-and-down">
-            <span>QuestionBot</span>
+    <v-toolbar color="primary darken-1 hidden-md-and-up" dark>
+        <v-toolbar-title class="ml-0 pl-3 ">
+            <span><v-icon left>contact_support</v-icon> QuestionBot</span>
         </v-toolbar-title>
     </v-toolbar>
       <vue-perfect-scrollbar class="drawer-menu&#45;&#45;scroll" :settings="scrollSettings">
