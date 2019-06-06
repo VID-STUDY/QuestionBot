@@ -41,7 +41,8 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     test = Test.get_by_id(test_id)
     # Check if user given an answer for current quiz
     now_utc = datetime.utcnow()
-    if now_utc > test.quiz.end_date:
+    quiz_date = test.quiz.end_date
+    if now_utc > datetime(quiz_date.year, quiz_date.month, quiz_date.day):
         message = strings.get_string('answer.quiz_already_ended')
         telegram_bot.answer_callback_query(query.id, message, show_alert=True)
         return
@@ -52,7 +53,8 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
         return
     right_answer = test.get_right_answer()
     # if user given right answer
-    if option_id == right_answer.id:
+    if int(option_id) == right_answer.id:
+        answer_right = True
         answers_count = test.get_count_user_answers(user.id)
         # If user given right answer on first try
         if answers_count == 0:
@@ -65,9 +67,10 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
             message = strings.get_string('answer.right_answer_on_the_not_first_try').format(answers_count + 1,
                                                                                             answer_points)
     else:
+        answer_right=False
         answer_points = 0
         message = strings.get_string('answer.wrong_answer')
-    answer = Answer(user_id=user.id, points=answer_points, channel_id=channel.id)
+    answer = Answer(user_id=user.id, points=answer_points, channel_id=channel.id, is_right=answer_right)
     test.add_answer(answer)
     try:
         telegram_bot.answer_callback_query(query.id, message, show_alert=True)
