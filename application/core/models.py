@@ -3,6 +3,10 @@ from datetime import datetime
 import settings
 from application.utils import date as dateutils
 from sqlalchemy import func
+from werkzeug.utils import secure_filename
+from application.utils import files
+from config import Config
+import os
 
 members = db.Table('channel_members',
                    db.Column('bot_user_id', db.Integer, db.ForeignKey('bot_user.id'), primary_key=True),
@@ -36,7 +40,7 @@ class BotUser(db.Model):
 
 class Channel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    chat_id = db.Column(db.Integer)
+    chat_id = db.Column(db.BigInteger)
     channel_name = db.Column(db.String(100))
     channel_title = db.Column(db.String(100))
     members = db.relationship('BotUser', secondary=members, lazy='dynamic', backref=db.backref('channels', lazy=True))
@@ -77,7 +81,7 @@ class Channel(db.Model):
         channel = Channel.get_by_name(channel_name)
         if not channel:
             return None
-        return channel.quizzes.all()
+        return channel.quizzes.order_by(Quiz.id.desc()).all()
 
     def is_member_exists(self, bot_user_id: int) -> bool:
         return self.members.filter(members.c.bot_user_id == bot_user_id).count() > 0
@@ -120,29 +124,38 @@ class Test(db.Model):
     publish_date = db.Column(db.DateTime)
     file_path = db.Column(db.String(150))
     published = db.Column(db.Boolean, default=False)
-    options = db.relationship('Option', lazy='dynamic')
-    answers = db.relationship('Answer', lazy='dynamic')
+    options = db.relationship('Option', lazy='dynamic', cascade="all,delete-orphan")
+    answers = db.relationship('Answer', lazy='dynamic', cascade="all,delete-orphan")
 
     def to_dict(self):
         options = self.options.all()
+        if self.file_path:
+            file = os.path.basename(self.file_path)
+        else:
+            file = None
         return {
             'id': self.id,
             'question': self.question,
-            'publishDate': self.publish_date.strftime('%d.%m.%Y'),
+            'quizId': self.quiz_id,
+            'publishDate': self.publish_date.strftime('%d.%m.%Y %H:%M'),
+            'file': file,
             'options': [option.to_dict() for option in options],
             'answersCount': self.answers.count()
         }
 
     @staticmethod
-    def create(json, quiz):
+    def create(json):
         test = Test()
         test.question = json['question']
-        test.publish_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['publishDate'], '%d.%m.%Y'))
+        date_json = json['publishDate']
+        time_json = json['publishTime']
+        test.publish_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(date_json + ' ' + time_json,
+                                                                               '%d.%m.%Y %H:%M'))
         new_options = Option.from_jsons(json['options'])
         for opt in new_options:
             test.options.append(opt)
             db.session.add(opt)
-        quiz.tests.append(test)
+        test.quiz_id = json['quizId']
         db.session.add(test)
         db.session.commit()
         return test
@@ -150,6 +163,16 @@ class Test(db.Model):
     @staticmethod
     def get_by_id(test_id: int):
         return Test.query.get(test_id)
+    
+    @staticmethod
+    def save_file(test_id: int, file):
+        test = Test.get_by_id(test_id)
+        if test.file_path:
+            files.remove_file(test.file_path)
+        file_path = os.path.join(Config.UPLOAD_FOLDER, secure_filename(file.filename))
+        files.save_file(file, file_path, recreate=True)
+        test.file_path = file_path
+        db.session.commit()
     
     @staticmethod
     def update(test_id: int, json: dict):
@@ -170,7 +193,6 @@ class Test(db.Model):
     def remove(test_id: int):
         db.session.delete(Test.get_by_id(test_id))
         db.session.commit()
-
 
     def add_answer(self, answer):
         self.answers.append(answer)
@@ -199,7 +221,7 @@ class Quiz(db.Model):
     end_date = db.Column(db.Date)
     top_count = db.Column(db.Integer)
     channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'))
-    tests = db.relationship('Test', lazy='dynamic', backref='quiz')
+    tests = db.relationship('Test', lazy='dynamic', backref='quiz', cascade='all,delete-orphan')
 
     def to_dict(self):
         tests = self.tests.all()
@@ -215,8 +237,8 @@ class Quiz(db.Model):
     @staticmethod
     def create(json: dict, channel: Channel):
         new_quiz = Quiz()
-        new_quiz.start_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['startDate'], '%d.%m.%Y'))
-        new_quiz.end_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['endDate'], '%d.%m.%Y'))
+        new_quiz.start_date = datetime.strptime(json['startDate'], '%d.%m.%Y')
+        new_quiz.end_date = datetime.strptime(json['endDate'], '%d.%m.%Y')
         new_quiz.top_count = json['topCount']
         channel.quizzes.append(new_quiz)
         db.session.add(new_quiz)
@@ -262,6 +284,7 @@ class Answer(db.Model):
 
     @staticmethod
     def get_summary_user_points_by_channel_and_period(channel_id: int, start_date: datetime, end_date: datetime):
+        # TODO: Переписать запрос. Фильтровать от большего к меньшему. Установить лимит
         points_by_users = db.query(BotUser.first_name, func.sum(Answer.points))\
             .filter(Answer.channel_id == channel_id and (start_date <= Answer.created_at <= end_date))\
             .group_by(BotUser.first_name).all()
