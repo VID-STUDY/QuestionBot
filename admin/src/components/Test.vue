@@ -13,7 +13,7 @@
                             <v-subheader>Варианты ответов</v-subheader>
                             <v-list-tile v-for="option in test.options" :key="option.id" class="option-item" avatar>
                                 <v-list-tile-avatar>
-                                    <v-checkbox color="primary" :disabled="!option.isAnswer" v-model="option.isAnswer"/>
+                                    <v-checkbox color="primary" :disabled="true" v-model="option.isAnswer"/>
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
                                     <v-list-tile-title class="option-item-title">
@@ -23,13 +23,17 @@
                             </v-list-tile>
                         </v-list>
                         <p class="mt-3"><span class="font-weight-bold">Всего ответов: </span>{{ test.answersCount }}</p>
+                        <p v-if="test.file && test.file !== ''">
+                            <span class="font-weight-bold">Файл: </span>
+                            {{ test.file }}
+                        </p>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer/>
-                        <v-btn flat color="primary" icon>
+                        <v-btn flat color="primary" icon @click.stop="$emit('openEditTestDialog', test)">
                             <v-icon medium>edit</v-icon>
                         </v-btn>
-                        <v-btn flat color="red" icon>
+                        <v-btn flat color="red" icon @click.stop="$emit('openDeleteTestDialog', test)">
                             <v-icon medium>delete</v-icon>
                         </v-btn>
                     </v-card-actions>
@@ -55,8 +59,7 @@
     .option-item {
         height: 24px;
         &-title {
-            height: 12px;
-            line-height: 12px;
+            line-height: 18px;
         }
     }
 </style>
