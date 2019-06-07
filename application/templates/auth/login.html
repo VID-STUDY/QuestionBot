@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{ title }} | QuestionBot</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/AdminLTE.min.css') }}">
 
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <span><b>QuestionBot</b> Admin</span>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Войдите в систему, чтобы начать ей пользоваться</p>
+
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+      <div class="form-group has-feedback {% if form.email.errors|length > 0 %}has-error{% endif %}">
+        {{ form.email(class="form-control", placeholder="Email") }}
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+          {% for error in form.email.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+      <div class="form-group has-feedback {% if form.password.errors|length > 0 %}has-error{% endif %}">
+        {{ form.password(class="form-control", placeholder="Пароль") }}
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          {% for error in form.password.errors %}
+              <span class="help-block">{{ error }}</span>
+          {% endfor %}
+      </div>
+      <div class="row">
+        <!-- /.col -->
+        <div class="col-xs-4">
+          {{ form.submit(class="btn btn-primary btn-block btn-flat") }}
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
 </body>
 </html>
