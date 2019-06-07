@@ -339,6 +339,18 @@ class Answer(db.Model):
         result = db.engine.execute(sql, quiz_id=quiz_id)
         return [(row[0], row[1]) for row in result]
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'userId': self.user_id,
+            'testId': self.test_id,
+            'points': self.points,
+            'is_right': self.is_right,
+            'createdAt': dateutils.convert_utc_to_asia_tz(self.created_at.strftime('%d:%m:%Y %H:%M')),
+            'channelId': self.channel_id,
+            'quizId': self.quiz_id
+        }
+
 
 class Poll:
     def __init__(self, question: str, options: list):
