@@ -26,7 +26,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 loginManager = LoginManager(app)
-loginManager.login_view = 'application.auth.login'
+loginManager.login_view = 'auth.login'
 loginManager.login_message = strings.get_string('authentication.required')
 loginManager.login_message_category = 'error'
 
@@ -53,3 +53,5 @@ def shell_context():
     return {
         'db': db
     }
+
+from . import cli

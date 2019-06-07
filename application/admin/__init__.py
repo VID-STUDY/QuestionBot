@@ -1,6 +1,6 @@
 from flask import Blueprint
 
 
-bp = Blueprint(__name__, 'admin')
+bp = Blueprint('admin', __name__)
 
 from . import index
