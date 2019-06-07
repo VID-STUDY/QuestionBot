@@ -252,7 +252,6 @@ class Test(db.Model):
         return self.options.filter(Option.is_answer == True).first()
 
     def user_given_right_answer(self, user_id):
-        right_answer_points = settings.get_right_answer_points()
         return self.answers.filter(and_(Answer.user_id == user_id, Answer.is_right == True)).count() > 0
 
     def make_published(self):
