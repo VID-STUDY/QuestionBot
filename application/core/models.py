@@ -146,6 +146,10 @@ class Channel(db.Model):
         now = datetime.utcnow()
         return self.quizzes.filter(and_(Quiz.start_date <= now, now <= Quiz.end_date)).first()
 
+    def get_channel_tests(self):
+        return Test.query.filter(Test.channel_id == self.id).all()
+
+
 
 class Option(db.Model):
     id = db.Column(db.Integer, primary_key=True)
