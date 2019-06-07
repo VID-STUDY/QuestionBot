@@ -49,6 +49,9 @@
     export default {
         name: "ChannelRating",
         props: ['name'],
+        title() {
+          return `Рейтинги - ${this.name}`
+        },
         data: () => ({
             quizzes: [],
             error: false,

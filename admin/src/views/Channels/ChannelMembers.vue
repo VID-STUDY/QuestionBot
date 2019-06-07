@@ -28,7 +28,9 @@
     import apiEndpoints from "../../apiEndpoints";
 
     export default {
-        title: "Участники",
+        title() {
+          return `Участники - ${this.name}`
+        },
         name: 'ChannelMembers',
         props: ['name'],
         data: () => ({

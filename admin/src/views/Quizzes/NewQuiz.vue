@@ -127,7 +127,7 @@ export default {
   name: "NewQuiz",
   props: ["name"],
   title () {
-    return `Канал ${this.name} - Добавить викторину`
+    return `Добавить викторину - ${this.name}`
   },
   data: () => ({
     isValid: true,
@@ -188,7 +188,17 @@ export default {
       const requiredRule = value => {
         return value !== "" || "Укажите количество топ игроков"
       };
+      const isNumberRule = value => {
+        return !isNaN(value) || "Количество топ игроков должно быть числом"
+      };
+      const moreThanZero = value => {
+        if (value !== '' && !isNaN(value)) {
+          return +value >= 0 || "Количество топ игроков должно быть больше или равным нулю";
+        }
+      };
       rules.push(requiredRule);
+      rules.push(isNumberRule);
+      rules.push(moreThanZero);
       return rules;
     }
   },

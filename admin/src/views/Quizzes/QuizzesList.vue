@@ -72,7 +72,7 @@ export default {
   name: "QuizzesList",
   props: ["name"],
   title () {
-    return `Канал ${this.name} - Викторины`
+    return `Викторины - ${this.name}`
   },
   data: () => ({
     quizzes: [],

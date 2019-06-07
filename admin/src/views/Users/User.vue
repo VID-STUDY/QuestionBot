@@ -136,6 +136,7 @@
                     this.user = data;
                     this.answersToShow = data.answers;
                     this.countPointsSum();
+                    document.title = `${user.firstName} | QuestionBot`;
                 }).catch(error => {
                     this.error = true;
                     if (error.response) {
