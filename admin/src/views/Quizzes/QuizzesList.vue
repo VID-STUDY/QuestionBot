@@ -174,6 +174,11 @@ export default {
   },
   mounted() {
     this.getQuizzes();
+  },
+  watch: {
+    '$route'() {
+      this.getQuizzes();
+    }
   }
 };
 </script>
