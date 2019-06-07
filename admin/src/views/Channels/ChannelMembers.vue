@@ -6,7 +6,7 @@
           <v-card-text>
             <v-list two-line subheader>
               <v-subheader>Пользователи, которые принимают участие в опросах</v-subheader>
-              <v-list-tile :to="{name: 'channelUser', params: {name: name, userId: user.id}}" v-for="user in users" :key="user.id">
+              <v-list-tile ripple :to="{name: 'channelUser', params: {name: name, userId: user.id}}" v-for="user in users" :key="user.id">
                 <v-list-tile-content>
                   <v-list-tile-title>{{ user.firstName }} <span v-if="user.lastName && user.lastName !== ''">{{ user.lastName }}</span></v-list-tile-title>
                   <v-list-tile-sub-title>
