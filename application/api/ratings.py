@@ -4,12 +4,8 @@ from application.utils import api as apiutils
 from application.core.models import Channel
 
 
-def _sort_tests_key(test):
-    return test.answers.count()
-
-
 def _sort_tests(tests: list):
-    tests.sort(key=_sort_tests_key)
+    tests.sort(key=lambda t: t.answers.count(), reverse=True)
 
 
 @bp.route('/channels/<int:channel_name>/rating', methods=['GET'])
