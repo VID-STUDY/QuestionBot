@@ -3,12 +3,22 @@
         <h4>{{ quiz.startDate }} - {{ quiz.endDate }}</h4>
         <div>
             <v-spacer></v-spacer>
-            <v-btn small icon flat color='primary' @click.stop="$emit('openNewTestDialog', quiz)">
-                <v-icon>add</v-icon>
-            </v-btn>
-            <v-btn small flat color='red' icon @click.stop="$emit('openDeleteQuizDialog', quiz)">
-                <v-icon>delete</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn small icon flat color='primary' @click.stop="$emit('openNewTestDialog', quiz)" v-on="on">
+                        <v-icon>add</v-icon>
+                    </v-btn>
+                </template>
+                <span>Добавить тест</span>
+            </v-tooltip>
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                    <v-btn small flat color='red' icon @click.stop="$emit('openDeleteQuizDialog', quiz)" v-on="on">
+                        <v-icon>delete</v-icon>
+                    </v-btn>
+                </template>
+                <span>Удалить викторину</span>
+            </v-tooltip>
         </div>
         <v-item-group>
             <v-container grid-list-md>

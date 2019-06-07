@@ -30,12 +30,23 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer/>
-                        <v-btn flat color="primary" icon @click.stop="$emit('openEditTestDialog', test)">
-                            <v-icon medium>edit</v-icon>
-                        </v-btn>
-                        <v-btn flat color="red" icon @click.stop="$emit('openDeleteTestDialog', test)">
-                            <v-icon medium>delete</v-icon>
-                        </v-btn>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-btn flat color="primary" icon @click.stop="$emit('openEditTestDialog', test)" v-on="on">
+                                    <v-icon medium>edit</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Редактировать</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-btn flat color="red" icon @click.stop="$emit('openDeleteTestDialog', test)" v-on="on">
+                                    <v-icon medium>delete</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Удалить</span>
+                        </v-tooltip>
+
                     </v-card-actions>
                 </v-card>
             </div>
