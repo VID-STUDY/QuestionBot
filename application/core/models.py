@@ -327,6 +327,7 @@ class Answer(db.Model):
     points = db.Column(db.Integer)
     is_right = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    quiz_id = db.Column(db.Integer)
     channel_id = db.Column(db.Integer)
 
     @staticmethod
