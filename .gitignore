@@ -121,6 +121,9 @@ dmypy.json
 # PyCharm cache
 .idea/
 
+# dist
+dist/
+
 # VS Code cache
 .vscode/
 

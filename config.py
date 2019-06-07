@@ -18,4 +18,4 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
     UPLOAD_FOLDER = os.path.join(basedir, 'data')
-    DIST_DIR = os.path.join(basedir, 'admin', 'dist')
+    DIST_DIR = os.path.join(basedir, 'dist')
