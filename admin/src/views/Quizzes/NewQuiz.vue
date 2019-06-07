@@ -126,6 +126,9 @@ import apiEndpoints from "../../apiEndpoints";
 export default {
   name: "NewQuiz",
   props: ["name"],
+  title () {
+    return `Канал ${this.name} - Добавить викторину`
+  },
   data: () => ({
     isValid: true,
     startMenu: false,

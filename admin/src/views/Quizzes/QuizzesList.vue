@@ -71,6 +71,9 @@ import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: "QuizzesList",
   props: ["name"],
+  title () {
+    return `Канал ${this.name} - Викторины`
+  },
   data: () => ({
     quizzes: [],
     hasError: false,

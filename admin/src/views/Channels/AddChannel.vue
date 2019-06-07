@@ -49,6 +49,7 @@
     import apis from '../../apiEndpoints'
     export default {
         name: "AddChannel",
+        title: 'Добавить канал',
         data: () => ({
             newChannel: {
                 url: '',
