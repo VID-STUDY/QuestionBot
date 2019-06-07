@@ -1,17 +1,40 @@
-from application import db
+from application import db, loginManager
 from datetime import datetime
 import settings
 from application.utils import date as dateutils
-from sqlalchemy import func
 from werkzeug.utils import secure_filename
 from application.utils import files
 from config import Config
 import os
 from sqlalchemy import and_
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 members = db.Table('channel_members',
                    db.Column('bot_user_id', db.Integer, db.ForeignKey('bot_user.id'), primary_key=True),
                    db.Column('channel_id', db.Integer, db.ForeignKey('channel.id'), primary_key=True))
+
+
+class AdminUser(db.Model, UserMixin):
+    __tablename__ = 'admin_users'
+    id = db.Column(db.Inreger, primary_key=True)
+    email = db.Column(db.String(100), index=True)
+    password_hash = db.Column(db.String(120))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    @staticmethod
+    def get_by_email(email):
+        return AdminUser.query.filter(AdminUser.email == email).first()
+
+
+@loginManager.user_loader
+def load_user(user_id):
+    return AdminUser.query.get(int(user_id))
 
 
 class BotUser(db.Model):
