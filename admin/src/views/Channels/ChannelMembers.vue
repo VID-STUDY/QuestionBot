@@ -11,7 +11,7 @@
                   <v-list-tile-title>{{ user.firstName }} <span v-if="user.lastName && user.lastName !== ''">{{ user.lastName }}</span></v-list-tile-title>
                   <v-list-tile-sub-title>
                     <span v-if="user.username && user.username !== ''">{{ user.username }}</span>
-                    <span v-else>Unknown</span>
+                    <span v-else>Unknown username</span>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
@@ -43,7 +43,6 @@
                         this.users.push(user);
                     })
                 }).catch(error => {
-
                 })
             }
         },
