@@ -20,5 +20,4 @@ def user(channel_name: str, user_id: int):
     if not user:
         error = apiutils.error_message(404, 'Такой пользователь не принимал участия в опросах')
         return jsonify(error), 404
-    answers = user.get_answers_by_channel_id(channel.id)
-    return jsonify([a.to_dict() for a in answers]), 200
+    return jsonify(user.to_dict(include_answers=True)), 200
