@@ -110,13 +110,6 @@ class Channel(db.Model):
         return channel
 
     @staticmethod
-    def get_tests_by_name(channel_name: str):
-        channel = Channel.query.filter(Channel.channel_name == channel_name).first()
-        if not channel:
-            return None
-        return channel.tests.all()
-
-    @staticmethod
     def get_by_name(channel_name: str):
         return Channel.query.filter(Channel.channel_name == channel_name).first()
 
