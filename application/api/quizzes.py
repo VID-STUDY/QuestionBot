@@ -10,7 +10,7 @@ def get_channel_quizzes(channel_name: str):
     if quizzes is None:
         error = apiutils.error_message(400, 'Такой канал не зарегистрирован')
         return jsonify(error), 400
-    return jsonify([q.to_dict() for q in quizzes]), 200
+    return jsonify([q.to_dict(include_tests=True) for q in quizzes]), 200
 
 
 @bp.route('/channels/<string:channel_name>/quizzes', methods=['POST'])

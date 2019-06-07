@@ -267,8 +267,13 @@ class Quiz(db.Model):
     channel_id = db.Column(db.Integer, db.ForeignKey('channel.id'))
     tests = db.relationship('Test', lazy='dynamic', backref='quiz', cascade='all,delete-orphan')
 
-    def to_dict(self):
-        tests = self.tests.all()
+    def to_dict(self, include_tests=False, sortcallback=None):
+        if include_tests:
+            tests = self.tests.all()
+        else:
+            tests = []
+        if include_tests and sortcallback:
+            sortcallback(tests)
         return {
             'id': self.id,
             'startDate': self.start_date.strftime('%d.%m.%Y'),
