@@ -4,17 +4,18 @@ from application.utils import api as apiutils
 from application.core.models import Channel
 
 
-def _sort_tests(test):
-    answers = test.answers.all()
-    return sum((answer.points for answer in answers if answer.is_right))
+def _sort_tests_key(test):
+    return test.answers.count()
+
+
+def _sort_tests(tests: list):
+    tests.sort(key=_sort_tests_key)
 
 
 @bp.route('/channels/<int:channel_name>/rating', methods=['GET'])
 def channel_ratings(channel_name: str):
-    channel = Channel.get_by_name(channel_name)
-    if not channel:
+    quizzes = Channel.get_quizzes_by_channel_name(channel_name)
+    if quizzes is None:
         error = apiutils.error_message(404, 'Такой канал не зарегистрирован')
         return jsonify(error), 404
-    tests = channel.get_channel_tests()
-    tests.sort(key=_sort_tests)
-    return jsonify(tests), 200
+    return jsonify([q.to_dict(include_tests=True, sortcallback=_sort_tests) for q in quizzes]), 200
