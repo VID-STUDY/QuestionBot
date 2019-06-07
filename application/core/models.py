@@ -17,7 +17,7 @@ members = db.Table('channel_members',
 
 class AdminUser(db.Model, UserMixin):
     __tablename__ = 'admin_users'
-    id = db.Column(db.Inreger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), index=True)
     password_hash = db.Column(db.String(120))
 
