@@ -308,14 +308,12 @@ class Answer(db.Model):
     channel_id = db.Column(db.Integer)
 
     @staticmethod
-    def get_summary_user_points_by_channel_and_period(channel_id: int, start_date: datetime, end_date: datetime):
+    def get_summary_user_points_by_channel_and_period(quiz_id: int):
         from sqlalchemy.sql import text
-        start_date_str = start_date.strftime('%Y-%m-%d')
-        end_date_str = end_date.strftime('%Y-%m-%d')
         sql = text("""SELECT bot_user.username, SUM(a.points) FROM bot_user 
         LEFT JOIN answer a on bot_user.id = a.user_id 
-        WHERE (a.created_at BETWEEN :start AND :end) AND (a.channel_id = :id) GROUP BY bot_user.username""")
-        result = db.engine.execute(sql, start=start_date_str, end=end_date_str, id=channel_id)
+        WHERE a.quiz_id = :quiz_id GROUP BY bot_user.username""")
+        result = db.engine.execute(sql, quiz_id=quiz_id)
         return [(row[0], row[1]) for row in result]
 
 
