@@ -5,7 +5,7 @@ from datetime import datetime
 
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
-_strings = json.loads(open(os.path.join(_basedir, 'strings.json'), 'r').read())
+_strings = json.loads(open(os.path.join(_basedir, 'strings.json'), 'r', encoding='utf8').read())
 
 
 def get_string(key: str) -> str:
