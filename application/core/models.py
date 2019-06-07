@@ -173,6 +173,7 @@ class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String(150))
     quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'))
+    channel_id = db.Column(db.Integer)
     publish_date = db.Column(db.DateTime)
     file_path = db.Column(db.String(150))
     published = db.Column(db.Boolean, default=False)
@@ -208,6 +209,7 @@ class Test(db.Model):
             test.options.append(opt)
             db.session.add(opt)
         test.quiz_id = json['quizId']
+        test.channel_id = Quiz.get_by_id(quiz_id=json['quizId']).channel_id
         db.session.add(test)
         db.session.commit()
         return test
