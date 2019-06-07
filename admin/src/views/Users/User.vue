@@ -89,7 +89,10 @@
           endDate(val) {
             this.endDateFormatted = this.formatDate(this.endDate);
             this.sortAnswers();
-          }
+          },
+            '$route'() {
+              this.getUser();
+            }
         },
         methods: {
             sortAnswers() {
