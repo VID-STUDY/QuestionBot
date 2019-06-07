@@ -9,7 +9,7 @@ def publish_rating():
     for channel in channels:
         quiz = channel.get_current_quiz()
         if quiz:
-            user_points = Answer.get_summary_user_points_by_channel_and_period(quiz.id)
+            user_points = Answer.get_summary_user_points_by_channel_and_period(quiz.id, quiz.top_count)
             rating_message = strings.from_user_points_rating(user_points, quiz.start_date, quiz.end_date)
             telegram_bot.send_message(channel.chat_id, rating_message, parse_mode='HTML')
 

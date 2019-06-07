@@ -334,12 +334,12 @@ class Answer(db.Model):
     channel_id = db.Column(db.Integer)
 
     @staticmethod
-    def get_summary_user_points_by_channel_and_period(quiz_id: int):
+    def get_summary_user_points_by_channel_and_period(quiz_id: int, top_count):
         from sqlalchemy.sql import text
-        sql = text("""SELECT bot_user.username, SUM(a.points) FROM bot_user 
+        sql = text("""SELECT bot_user.username, SUM(a.points) points_sum FROM bot_user 
         LEFT JOIN answer a on bot_user.id = a.user_id 
-        WHERE a.quiz_id = :quiz_id GROUP BY bot_user.username""")
-        result = db.engine.execute(sql, quiz_id=quiz_id)
+        WHERE a.quiz_id = :quiz_id GROUP BY bot_user.username ORDER BY points_sum DESC LIMIT :limit;""")
+        result = db.engine.execute(sql, quiz_id=quiz_id, limit=top_count)
         return [(row[0], row[1]) for row in result]
 
     def to_dict(self):
