@@ -105,6 +105,7 @@ export default {
       this.deleteQuizDialog = true;
     },
     getQuizzes() {
+        this.quizzes = [];
       let apiUrl = apis.channelQuizzes.replace("channelName", this.name);
       Axios.get(apiUrl)
         .then(({ data }) => {
