@@ -8,6 +8,7 @@ import User from './views/Users/User'
 import ChannelRating from './views/Channels/ChannelRating'
 import NewQuiz from './views/Quizzes/NewQuiz'
 import QuizzesList from './views/Quizzes/QuizzesList'
+import Settings from './views/Settings'
 
 Vue.use(Router);
 
@@ -61,6 +62,11 @@ export default new Router({
       path: '/channels/new',
       name: 'newChannel',
       component: AddChannel
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Settings
     }
   ]
 })

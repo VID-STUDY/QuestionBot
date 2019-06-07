@@ -62,6 +62,14 @@
                         <v-list-tile-title>Добавить канал</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+                <v-list-tile :to="{name: 'settings'}">
+                    <v-list-tile-action>
+                        <v-icon>settings</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Настройки</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
                 <v-list-tile class="hidden-md-and-up">
                     <v-list-tile-action>
                         <v-icon>exit_to_app</v-icon>
