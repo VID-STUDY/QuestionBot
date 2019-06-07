@@ -62,6 +62,14 @@
                         <v-list-tile-title>Добавить канал</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+                <v-list-tile class="hidden-md-and-up">
+                    <v-list-tile-action>
+                        <v-icon>exit_to_app</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title><a href="/auth/logout" style="text-decoration: none" class="text-gray">Выйти</a></v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
             </v-list>
       </vue-perfect-scrollbar>
     </v-navigation-drawer>
@@ -85,7 +93,11 @@
             </div>
             <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on"><v-icon>exit_to_app</v-icon></v-btn>
+                    <a href="/auth/logout" class="v-btn v-btn--icon theme--dark" v-on:mouseenter="on">
+                        <div class="v-btn__content">
+                            <i aria-hidden="true" class="v-icon material-icons theme--dark">exit_to_app</i>
+                        </div>
+                    </a>
                 </template>
                 <span>Выйти</span>
             </v-tooltip>
@@ -109,7 +121,6 @@
 </style>
 
 <script>
-import HelloWorld from './components/HelloWorld'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import apiEndpoints from './apiEndpoints'
 import axios from 'axios'
@@ -117,7 +128,6 @@ import axios from 'axios'
 export default {
   name: 'App',
   components: {
-      HelloWorld,
       VuePerfectScrollbar
   },
   data: () => ({
