@@ -8,7 +8,7 @@ def _sort_tests(tests: list):
     tests.sort(key=lambda t: t.answers.count(), reverse=True)
 
 
-@bp.route('/channels/<int:channel_name>/rating', methods=['GET'])
+@bp.route('/channels/<string:channel_name>/rating', methods=['GET'])
 def channel_ratings(channel_name: str):
     quizzes = Channel.get_quizzes_by_channel_name(channel_name)
     if quizzes is None:
