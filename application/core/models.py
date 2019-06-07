@@ -61,6 +61,30 @@ class BotUser(db.Model):
         else:
             return self.first_name
 
+    @staticmethod
+    def get_by_id_and_channel_name(channel_name: str, user_id: int):
+        channel = Channel.get_by_name(channel_name)
+        if channel.is_member_exists(user_id):
+            return channel, BotUser.query.get(user_id)
+        else:
+            return None, None
+
+    def get_answers_by_channel_id(self, channel_id: int):
+        return self.answers.filter(Answer.channel_id == channel_id).all()
+
+    def to_dict(self, include_answers=False):
+        if include_answers:
+            answers = self.answers.all()
+        else:
+            answers = []
+        return {
+            'id': self.id,
+            'username': self.username,
+            'firstName': self.first_name,
+            'lastName': self.last_name,
+            'answers': [a.to_dict() for a in answers]
+        }
+
 
 class Channel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
