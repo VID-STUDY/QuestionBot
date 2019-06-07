@@ -143,7 +143,6 @@ class Channel(db.Model):
         return Test.query.filter(Test.channel_id == self.id).all()
 
 
-
 class Option(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.String(100))
@@ -345,7 +344,7 @@ class Answer(db.Model):
             'testId': self.test_id,
             'points': self.points,
             'is_right': self.is_right,
-            'createdAt': dateutils.convert_utc_to_asia_tz(self.created_at.strftime('%d:%m:%Y %H:%M')),
+            'createdAt': dateutils.convert_utc_to_asia_tz(self.created_at).strftime('%d.%m.%Y'),
             'channelId': self.channel_id,
             'quizId': self.quiz_id
         }
