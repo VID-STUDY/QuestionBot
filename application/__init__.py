@@ -15,7 +15,7 @@ import logging
 
 telegram_bot = TeleBot(Config.API_TOKEN, threaded=False)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=os.path.join(Config.DIST_DIR, 'static'))
 if 'PRODUCTION' in os.environ:
     # if app starts in production, give it ssl-certificate
     sslify = SSLify(app)
@@ -26,7 +26,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 loginManager = LoginManager(app)
-loginManager.login_view = 'auth.login'
+loginManager.login_view = 'application.auth.login'
 loginManager.login_message = strings.get_string('authentication.required')
 loginManager.login_message_category = 'error'
 
@@ -36,6 +36,10 @@ from application.bot import bp as bot_bp
 app.register_blueprint(bot_bp)
 from application.api import bp as api_bp
 app.register_blueprint(api_bp, url_prefix='/api')
+from application.auth import bp as auth_bp
+app.register_blueprint(auth_bp, url_prefix="/auth")
+from application.admin import bp as admin_bp
+app.register_blueprint(admin_bp)
 
 if 'ADMIN_DEV' not in os.environ and 'PRODUCTION' not in os.environ:
     # When bot needs to be developed or tested, this configuration starts with long polling
