@@ -195,8 +195,7 @@ class Test(db.Model):
         test.question = json['question']
         date_json = json['publishDate']
         time_json = json['publishTime']
-        test.publish_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(date_json + ' ' + time_json,
-                                                                               '%d.%m.%Y %H:%M'))
+        test.publish_date = datetime.strptime(date_json + ' ' + time_json, '%d.%m.%Y %H:%M')
         new_options = Option.from_jsons(json['options'])
         for opt in new_options:
             test.options.append(opt)

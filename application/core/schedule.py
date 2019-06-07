@@ -4,7 +4,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 
 from application.bot import publishing
-from application.utils import date as dateutils
 
 
 _rating_trigger = CronTrigger(day_of_week='sun', hour=12, timezone='Asia/Tashkent')
@@ -14,7 +13,7 @@ _scheduler.start()
 
 
 def add_test_to_publish(test_id: int, date_time: datetime):
-    trigger = DateTrigger(run_date=dateutils.convert_utc_to_asia_tz(date_time), timezone='Asia/Tashkent')
+    trigger = DateTrigger(run_date=date_time, timezone='Asia/Tashkent')
     _scheduler.add_job(publishing.publish_test, trigger, [test_id], id='test_'+str(test_id))
 
 
