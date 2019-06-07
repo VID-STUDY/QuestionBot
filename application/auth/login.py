@@ -10,7 +10,7 @@ from werkzeug.urls import url_parse
 @login_required
 def logout():
     logout_user()
-    return '', 200
+    return redirect(url_for('auth.login'))
 
 
 @bp.route('/login', methods=['GET', 'POST'])
