@@ -64,6 +64,9 @@
 
     export default {
         name: "User",
+        title() {
+          return `Участник ${userId}`
+        },
         props: ["name", "userId"],
         data: () => ({
             user: {},
@@ -136,7 +139,6 @@
                     this.user = data;
                     this.answersToShow = data.answers;
                     this.countPointsSum();
-                    document.title = `${user.firstName} | QuestionBot`;
                 }).catch(error => {
                     this.error = true;
                     if (error.response) {
