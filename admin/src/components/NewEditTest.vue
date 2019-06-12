@@ -248,8 +248,8 @@ export default {
       test.options.forEach(option => {
         this.test.options.push(option);
       });
-      this.startDate = startDate;
-      this.endDate = endDate;
+      this.startDate = new Date(this.parseDate(startDate));
+      this.endDate = new Date(this.parseDate(endDate));
     },
     addOption() {
       if (!this.$refs.newOptionForm.validate()) {
