@@ -223,7 +223,9 @@ class Test(db.Model):
     def update(test_id: int, json: dict):
         test = Test.get_by_id(test_id)
         test.question = json['question']
-        test.publish_date = dateutils.convert_asia_tz_to_utc(datetime.strptime(json['publishDate'], '%d.%m.%Y'))
+        date_json = json['publishDate']
+        time_json = json['publishTime']
+        test.publish_date = datetime.strptime(date_json + ' ' + time_json, '%d.%m.%Y %H:%M')
         new_options = Option.from_jsons(json['options'])
         current_options = test.options.all()
         for option in current_options:
