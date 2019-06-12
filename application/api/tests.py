@@ -17,6 +17,7 @@ def create_test():
 def update_test(test_id: int):
     data = request.get_json()
     test = Test.update(test_id, data)
+    schedule.update_test_date_publish(test.id, test.publish_date)
     return jsonify(test.to_dict()), 200
 
 
@@ -45,4 +46,5 @@ def get_test_by_id(test_id: int):
 @bp.route('/tests/<int:test_id>', methods=['DELETE'])
 def remove_test(test_id: int):
     Test.remove(test_id)
+    schedule.remove_test_from_publishing(test_id)
     return '', 201
