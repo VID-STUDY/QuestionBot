@@ -16,10 +16,7 @@ import logging
 telegram_bot = TeleBot(Config.API_TOKEN, threaded=False)
 
 app = Flask(__name__, static_folder=os.path.join(Config.DIST_DIR, 'static'))
-if 'PRODUCTION' in os.environ:
-    # if app starts in production, give it ssl-certificate
-    sslify = SSLify(app)
-else:
+if 'PRODUCTION' not in os.environ:
     cors = CORS(app)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
