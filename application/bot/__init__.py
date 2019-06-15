@@ -1,8 +1,9 @@
 from flask import Blueprint, request, abort
-from application import telegram_bot as bot
+from application import telegram_bot as bot, logger
 from config import Config
 from telebot.types import Update
 import os
+import logging
 
 bp = Blueprint('bot', __name__)
 
@@ -22,4 +23,4 @@ if 'PRODUCTION' in os.environ:
             abort(400)
 
     bot.remove_webhook()
-    bot.set_webhook(Config.WEBHOOK_URL_BASE + Config.WEBHOOK_URL_PATH)
+    bot.set_webhook(Config.WEBHOOK_URL_BASE + '/bot' + Config.WEBHOOK_URL_PATH, certificate=open(Config.WEBHOOK_SSL_CERT, 'r'))

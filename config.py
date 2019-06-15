@@ -12,7 +12,8 @@ class Config:
     API_TOKEN = os.environ.get('API_TOKEN')
     WEBHOOK_HOST = os.environ.get('WEBHOOK_HOST')
     WEBHOOK_URL_BASE = 'https://%s' % WEBHOOK_HOST
-    WEBHOOK_URL_PATH = '/%s/' % API_TOKEN
+    WEBHOOK_URL_PATH = '/%s' % API_TOKEN
+    WEBHOOK_SSL_CERT = '/home/telegrambot/certs/cert.pem'
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
     SQLALCHEMY_TRACK_MODIFICATIONS = False

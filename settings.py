@@ -1,12 +1,14 @@
 import shelve
 from config import basedir
 import os
+import logging
 
 
 filename = os.path.join(basedir, 'settings.data')
 
 
 def _get_value(key: str):
+    logging.info(key)
     settings = shelve.open(filename)
     value = settings[key]
     settings.close()
