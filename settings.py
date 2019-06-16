@@ -27,3 +27,17 @@ def get_right_answer_points() -> int:
 
 def set_right_answer_points(points):
     _set_value('right_answer_points', points)
+
+
+def get_bot_state() -> str:
+    return _get_value('bot_state')
+
+
+def set_bot_state(state):
+    _set_value('bot_state', state)
+
+
+class BotStates:
+    PAUSED = 'paused'
+    WORK = 'work'
+    STOPPED = 'stopped'
