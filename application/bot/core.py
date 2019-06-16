@@ -12,6 +12,8 @@ import settings
 
 @telegram_bot.callback_query_handler(func=lambda query: True)
 def answer_handler(query: CallbackQuery):
+    if settings.get_bot_state() != settings.BotStates.WORK:
+        return
     data = query.data
     data = data.split('@')
     test_id = data[0]
