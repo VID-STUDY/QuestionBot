@@ -2,12 +2,14 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.date import DateTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
+from config import Config
 
 from application.bot import publishing
 
 
 _rating_trigger = CronTrigger(day_of_week='sun', hour=12, timezone='Asia/Tashkent')
 _scheduler = BackgroundScheduler()
+_scheduler.add_jobstore('sqlalchemy', url=Config.SQLALCHEMY_DATABASE_URI)
 _scheduler.add_job(publishing.publish_rating, _rating_trigger)
 _scheduler.start()
 
@@ -18,7 +20,10 @@ def add_test_to_publish(test_id: int, date_time: datetime):
 
 
 def remove_test_from_publishing(test_id: int):
-    _scheduler.remove_job('test_'+str(test_id))
+    try:
+        _scheduler.remove_job('test_'+str(test_id))
+    except:
+        pass
 
 
 def update_test_date_publish(test_id: int, date_time: datetime):
@@ -28,3 +33,12 @@ def update_test_date_publish(test_id: int, date_time: datetime):
 
 def stop_all_jobs():
     _scheduler.remove_all_jobs()
+
+
+def pause_scheduler():
+    _scheduler.pause()
+
+
+def resume_scheduler():
+    _scheduler.resume()
+    _scheduler.add_job(publishing.publish_rating, _rating_trigger, replace_existing=True)
