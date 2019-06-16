@@ -218,6 +218,7 @@ class Test(db.Model):
         files.save_file(file, file_path, recreate=True)
         test.file_path = file_path
         db.session.commit()
+        return file_path
     
     @staticmethod
     def update(test_id: int, json: dict):
