@@ -28,8 +28,8 @@ def save_test_file(test_id: int):
         return jsonify(error)
     file = request.files['file']
     if file.filename != '':
-        Test.save_file(test_id, file)
-        return '', 201
+        filename = Test.save_file(test_id, file)
+        return jsonify({'filename': filename}), 200
     error = apiutils.error_message(400, 'Файл не выбран')
     return jsonify(error), 400
 
