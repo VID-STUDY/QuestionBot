@@ -1,5 +1,6 @@
 from . import bp
 from flask import jsonify
+from flask_login import current_user
 from application.core.models import Channel, BotUser
 from application.utils import api as apiutils
 
@@ -21,3 +22,10 @@ def user(channel_name: str, user_id: int):
         error = apiutils.error_message(404, 'Такой пользователь не принимал участия в опросах')
         return jsonify(error), 404
     return jsonify(user.to_dict(include_answers=True)), 200
+
+
+@bp.route('/users/authenticated', methods=['GET'])
+def get_authenticated_user():
+    return {
+        'email': current_user.email
+    }
