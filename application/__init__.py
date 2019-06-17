@@ -15,9 +15,7 @@ import logging
 
 telegram_bot = TeleBot(Config.API_TOKEN, threaded=False)
 
-app = Flask(__name__, static_folder=os.path.join(Config.DIST_DIR, 'static'))
-if 'PRODUCTION' not in os.environ:
-    cors = CORS(app)
+app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
