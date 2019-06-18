@@ -12,3 +12,7 @@ def create_quiz(start_date: str, end_date: str, top_count: int, channel_id: int)
     db.session.add(quiz)
     db.session.commit()
     return quiz
+
+
+def get_by_id(quiz_id):
+    return Quiz.query.get_or_404(quiz_id)
