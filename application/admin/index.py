@@ -1,13 +1,9 @@
 from . import bp
-from flask import send_file, current_app, url_for
+from flask import render_template
 from flask_login import login_required
-import os
 
 
-@bp.route('/', defaults={'path': ''}, methods=['GET'])
-@bp.route('/<path:path>', methods=['GET'])
+@bp.route('/')
 @login_required
-def index_client(path):
-    dist_dir = current_app.config['DIST_DIR']
-    entry = os.path.join(dist_dir, 'index.html')
-    return send_file(entry)
+def index_client():
+    return render_template('admin/index.html')
