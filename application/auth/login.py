@@ -16,13 +16,13 @@ def logout():
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('admin.index_client'))
+        return redirect(url_for('admin.index'))
     form = LoginForm()
     if form.validate_on_submit():
         user = AdminUser.get_by_email(form.email.data)
         login_user(user, remember=False)
         next_url = request.args.get('next')
         if not next_url or url_parse(next_url).netloc != '':
-            return redirect(url_for('admin.index_client'))
+            return redirect(url_for('admin.index'))
         return redirect(next_url)
     return render_template('auth/login.html', title="Log in", form=form)
