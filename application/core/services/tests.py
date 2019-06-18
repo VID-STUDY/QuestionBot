@@ -56,3 +56,12 @@ def remove_test(test_id):
         files.remove_file(test.file_path)
     db.session.delete(test)
     db.session.commit()
+
+
+def get_tests_by_quiz_id(quiz_id: int):
+    quiz = Quiz.query.get_or_404(quiz_id)
+    return quiz.tests.order_by(Test.publish_date.desc()).all()
+
+
+def get_by_id(test_id):
+    return Test.query.get_or_404(test_id)
