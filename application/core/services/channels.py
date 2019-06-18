@@ -13,3 +13,7 @@ def remove_channel(channel_id):
     channel = Channel.query.get_or_404(channel_id)
     db.session.delete(channel)
     db.session.commit()
+
+
+def channel_exists(channel_name):
+    return Channel.query.filter(Channel.channel_name == channel_name[1:]).count() > 0
