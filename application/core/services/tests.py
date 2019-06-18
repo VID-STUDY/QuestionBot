@@ -1,5 +1,5 @@
 from application import db
-from application.core.models import Test, Option
+from application.core.models import Test, Option, Quiz
 from datetime import datetime
 from config import Config
 from werkzeug.utils import secure_filename
@@ -8,8 +8,10 @@ import os
 
 
 def create_test(question: str, publish_date: str, publish_time: str,
-                quiz_id: int, channel_id: int, options: list, file):
+                quiz_id: int, options: list, file):
     publish_date_time = datetime.strptime(publish_date + ' ' + publish_time, '%d.%m.%Y %H:%M')
+    quiz = Quiz.get_by_id(quiz_id)
+    channel_id = quiz.channel_id
     test = Test(question=question, quiz_id=quiz_id, channel_id=channel_id, publish_date=publish_date_time)
     for option in options:
         option = Option(value=option.value, is_answer=option.is_answer)
