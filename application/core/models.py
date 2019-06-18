@@ -124,6 +124,13 @@ class Channel(db.Model):
             return None
         return channel.quizzes.order_by(Quiz.id.desc()).all()
 
+    @staticmethod
+    def get_quizzes_by_channel_id(channel_id: int):
+        channel = Channel.query.get(channel_id)
+        if not channel:
+            return None
+        return channel.quizzes.order_by(Quiz.id.desc()).all()
+
     def is_member_exists(self, bot_user_id: int) -> bool:
         return self.members.filter(members.c.bot_user_id == bot_user_id).count() > 0
 
