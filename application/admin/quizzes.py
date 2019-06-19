@@ -1,6 +1,6 @@
 from . import bp
 from .forms import NewQuizForm
-from application.core.services import quizzes
+from application.core.services import quizzes, channels
 from flask import render_template, url_for, redirect, flash, abort
 from flask_login import login_required
 from application.core.models import Channel, Quiz
@@ -10,9 +10,10 @@ from application.core.models import Channel, Quiz
 @login_required
 def channel_quizzes(channel_id):
     chann_quizzes = Channel.get_quizzes_by_channel_id(channel_id)
+    channel = channels.get_by_id(channel_id)
     if channel_quizzes is None:
         abort(404)
-    return render_template('admin/quizzes.html', quizzes=chann_quizzes)
+    return render_template('admin/quizzes.html', quizzes=chann_quizzes, channel=channel)
 
 
 @bp.route('/channels/<int:channel_id>/quizzes/create', methods=['GET', 'POST'])
