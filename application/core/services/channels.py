@@ -17,3 +17,7 @@ def remove_channel(channel_id):
 
 def channel_exists(channel_name):
     return Channel.query.filter(Channel.channel_name == channel_name[1:]).count() > 0
+
+
+def get_by_id(channel_id) -> Channel:
+    return Channel.query.get_or_404(channel_id)
