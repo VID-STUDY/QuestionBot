@@ -31,13 +31,6 @@ def create_quiz(channel_id: int):
     return render_template('admin/new-quiz.html', form=form, channel=channel)
 
 
-@bp.route('/channels/<int:channel_id>/quizzes/<int:quiz_id>', methods=['GET'])
-@login_required
-def show_quiz(quiz_id: int, channel_id: int):
-    quiz = Quiz.get_by_id(quiz_id)
-    return render_template('admin/quiz.html', quiz=quiz, channel_id=channel_id)
-
-
 @bp.route('/channels/<int:channel_id>/<int:quiz_id>/remove', methods=['GET'])
 @login_required
 def remove_quiz(quiz_id: int, channel_id: int):
