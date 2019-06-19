@@ -26,8 +26,9 @@ def create_quiz(channel_id: int):
         top_count = int(form.top_count.data)
         quizzes.create_quiz(start_date, end_date, top_count, channel_id)
         flash('Викторина {} - {} создана!'.format(start_date, end_date), category='success')
-        return redirect(url_for('admin.channel_quizzes'))
-    return render_template('admin/new-quiz.html', form=form)
+        return redirect(url_for('admin.channel_quizzes', channel_id=channel_id))
+    channel = channels.get_by_id(channel_id)
+    return render_template('admin/new-quiz.html', form=form, channel=channel)
 
 
 @bp.route('/channels/<int:channel_id>/quizzes/<int:quiz_id>', methods=['GET'])
