@@ -159,6 +159,7 @@
         <!-- Main Container -->
         <main id="main-container">
             <!-- Page Content -->
+            {% if request.endpoint != 'admin.index' %}
             <div class="content">
                 <nav class="breadcrumb bg-white push">
                     <a class="breadcrumb-item" href="{{ url_for('admin.index') }}">QuestionBot</a>
@@ -166,6 +167,9 @@
                 </nav>
                 {% block content %}{% endblock %}
             </div>
+            {% else %}
+                {% block hero %}{% endblock %}
+            {% endif %}
             <!-- END Page Content -->
         </main>
         <!-- END Main Container -->
