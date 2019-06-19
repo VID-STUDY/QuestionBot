@@ -11,7 +11,8 @@ from application.core import schedule
 @login_required
 def quizzes_tests(quiz_id: int):
     quiz_polls = tests.get_tests_by_quiz_id(quiz_id)
-    return render_template('admin/tests-list.html', tests=quiz_polls)
+    quiz = quizzes.get_by_id(quiz_id)
+    return render_template('admin/tests-list.html', tests=quiz_polls, quiz=quiz)
 
 
 @bp.route('/quizzes/<int:quiz_id>/tests/<int:test_id>', methods=['GET', 'POST'])
