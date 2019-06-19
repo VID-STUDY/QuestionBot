@@ -26,6 +26,7 @@ loginManager.login_message = strings.get_string('authentication.required')
 loginManager.login_message_category = 'error'
 
 import application.core.models
+import application.utils.filters
 
 from application.bot import bp as bot_bp
 app.register_blueprint(bot_bp, url_prefix='/bot')
