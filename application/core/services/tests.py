@@ -37,7 +37,7 @@ def update_test(test_id: int, question: str, publish_date: str, publish_time: st
         for option in current_options:
             db.session.delete(option)
         for option in options:
-            option = Option(value=option.value, is_answer=option.is_answer)
+            option = Option(value=option.data['value'], is_answer=option.data['is_answer'])
             test.options.append(option)
             db.session.add(option)
     if file and file.filename != '':
