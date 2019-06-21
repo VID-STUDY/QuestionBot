@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 class NewChannelForm(FlaskForm):
-    channel_name_url = StringField(validators=[DataRequired('Укажите ссылку на канал или его юзернейм')])
+    channel_name_url = StringField("Канал", validators=[DataRequired('Укажите ссылку на канал или его юзернейм')])
     submit = SubmitField('Сохранить')
 
     def validate_channel_name_url(self, field):
