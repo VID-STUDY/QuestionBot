@@ -27,3 +27,13 @@ def date(value: datetime, format="%d.%m.%Y"):
 @app.template_filter()
 def convert_utc_asia(value: datetime):
     return convert_utc_to_asia_tz(value)
+
+
+@app.template_filter()
+def user(value):
+    if not value:
+        return "None"
+    user_name = value.first_name
+    if value.last_name:
+        user_name += " {}".format(value.last_name)
+    return user_name
