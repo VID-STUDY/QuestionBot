@@ -30,8 +30,6 @@ import application.utils.filters
 
 from application.bot import bp as bot_bp
 app.register_blueprint(bot_bp, url_prefix='/bot')
-from application.api import bp as api_bp
-app.register_blueprint(api_bp, url_prefix='/api')
 from application.auth import bp as auth_bp
 app.register_blueprint(auth_bp, url_prefix="/auth")
 from application.admin import bp as admin_bp
