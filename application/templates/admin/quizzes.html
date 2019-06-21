@@ -11,7 +11,7 @@
         </a>
     </div>
     <div class="block">
-        <div class="block-header block-header-primary">
+        <div class="block-header block-header-default">
             <h3 class="block-title">Викторины</h3>
             <div class="block-options">
                 <a href="{{ url_for('admin.create_quiz', channel_id=channel.id) }}" class="btn-block-option"><i class="si si-plus"></i> Создать</a>
@@ -19,7 +19,7 @@
         </div>
         <div class="block-content">
             {% if quizzes %}
-                <ul class="list-group mb-20">
+                <ul class="list-group list-group-flush mb-20">
                     {% for quiz in quizzes %}
                         <a href="{{ url_for('admin.quizzes_tests', quiz_id=quiz.id) }}" class="list-group-item d-flex justify-content-between align-items-center">
                             {{ quiz.start_date|date }} - {{ quiz.end_date|date }}
