@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% block title %}{{ channel.name }} - Викторины{% endblock %}
+{% block title %}{{ channel.channel_name }} - Викторины{% endblock %}
 {% block breadcrumbs %}
     <span class="breadcrumb-item">{{ channel.channel_name }}</span>
     <span class="breadcrumb-item active">Викторины</span>
@@ -22,7 +22,7 @@
                 <ul class="list-group mb-20">
                     {% for quiz in quizzes %}
                         <a href="{{ url_for('admin.quizzes_tests', quiz_id=quiz.id) }}" class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ quiz.start_date }} - {{ quiz.end_date }}
+                            {{ quiz.start_date|date }} - {{ quiz.end_date|date }}
                             <span class="badge badge-primary badge-pill" data-toggle="tooltip" title="Всего тестов">{{ quiz.tests.count() }}</span>
                         </a>
                     {% endfor %}
