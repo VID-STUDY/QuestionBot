@@ -100,10 +100,10 @@
         </div>
         <div class="block-content">
             {% if answers %}
-                <ul class="list-group">
+                <ul class="list-group list-group-flush mb-20">
                     {% for answer in answers %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ answer.user.first_name }}{% if answer.user.last_name %} {{ answer.user.last_name }}{% endif %}{% if answer.user.username %} - <span class="muted-text">{{ answer.user.username }}</span>{% endif %}
+                            {{ answer.user.first_name }}{% if answer.user.last_name %} {{ answer.user.last_name }}{% endif %}{% if answer.user.username %} - @{{ answer.user.username }}{% endif %}
                             <span class="badge badge-primary badge-pill">{{ answer.created_at|convert_utc_asia|datetime }}</span>
                         </li>
                     {% endfor %}
