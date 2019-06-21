@@ -14,7 +14,7 @@ def create_test(question: str, publish_date: str, publish_time: str,
     channel_id = quiz.channel_id
     test = Test(question=question, quiz_id=quiz_id, channel_id=channel_id, publish_date=publish_date_time)
     for option in options:
-        option = Option(value=option.value, is_answer=option.is_answer)
+        option = Option(value=option.data['value'], is_answer=option.data['is_answer'])
         test.options.append(option)
         db.session.add(option)
     if file and file.filename != '':
