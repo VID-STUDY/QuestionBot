@@ -2,6 +2,7 @@ from application import app
 import os
 from datetime import datetime
 from .date import convert_utc_to_asia_tz
+import settings
 
 
 @app.template_filter()
@@ -37,3 +38,13 @@ def user(value):
     if value.last_name:
         user_name += " {}".format(value.last_name)
     return user_name
+
+
+@app.template_filter()
+def bot_state(value):
+    if value == settings.BotStates.STOPPED:
+        return "Остановлен"
+    elif value == settings.BotStates.PAUSED:
+        return "Пауза"
+    elif value == settings.BotStates.WORK:
+        return "Работает"
