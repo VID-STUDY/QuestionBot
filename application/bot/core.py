@@ -7,6 +7,7 @@ from telebot.apihelper import ApiException
 from application.core.models import Test, Channel, BotUser, Answer
 from application.resources import strings
 from datetime import datetime
+from application.utils import date
 import settings
 
 
@@ -44,7 +45,7 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     # Check if user given an answer for current quiz
     now_utc = datetime.utcnow()
     quiz_date = test.quiz.end_date
-    if now_utc > datetime(quiz_date.year, quiz_date.month, quiz_date.day):
+    if date.convert_utc_to_asia_tz(now_utc) > datetime(quiz_date.year, quiz_date.month, quiz_date.day):
         message = strings.get_string('answer.quiz_already_ended')
         telegram_bot.answer_callback_query(query.id, message, show_alert=True)
         return
