@@ -51,7 +51,7 @@ def create_test(quiz_id: int):
     quiz = quizzes.get_by_id(quiz_id)
     form.init()
     form.set_start_end_dates(quiz.start_date, quiz.end_date)
-    return render_template('admin/new-test.html', form=form)
+    return render_template('admin/new-test.html', form=form, quiz=quiz)
 
 
 @bp.route('/quizzes/<int:quiz_id>/tests/<int:test_id>/remove')
