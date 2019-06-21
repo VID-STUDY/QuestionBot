@@ -60,7 +60,7 @@ def remove_test(test_id):
 
 def get_tests_by_quiz_id(quiz_id: int):
     quiz = Quiz.query.get_or_404(quiz_id)
-    return quiz.tests.order_by(Test.publish_date.desc()).all()
+    return quiz.tests.order_by(Test.publish_date).all()
 
 
 def get_by_id(test_id):
