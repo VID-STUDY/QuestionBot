@@ -4,6 +4,7 @@ from flask import render_template, url_for, redirect, flash
 from flask_login import login_required
 
 from application.core.services import tests, quizzes
+from application.core.models import Answer
 from application.core import schedule
 
 
@@ -30,8 +31,10 @@ def show_test(test_id: int, quiz_id: int):
         flash('Тест {} изменён!'.format(question), category='success')
         return redirect(url_for('admin.quizzes_tests', quiz_id=quiz_id))
     test = tests.get_by_id(test_id)
+    quiz = quizzes.get_by_id(quiz_id)
+    answers = test.answers.filter(Answer.is_right == True, Answer.points != 0).order_by(Answer.created_at.desc()).all()
     form.fill_from_object(test)
-    return render_template('admin/test.html', form=form, test=test)
+    return render_template('admin/test.html', form=form, test=test, quiz=quiz, answers=answers)
 
 
 @bp.route('/quizzes/<int:quiz_id>/tests/new', methods=['GET', 'POST'])
