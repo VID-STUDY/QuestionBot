@@ -70,15 +70,12 @@ class TestForm(FlaskForm):
     publish_date = StringField('День публикации', validators=[DataRequired('Укажите день публикации')])
     publish_time = StringField('Время публикации', validators=[DataRequired('Укажите время публикации')])
     file = FileField('Файл')
-    options = FieldList(FormField(OptionForm), min_entries=1)
+    options = FieldList(FormField(OptionForm))
     start_date = HiddenField()
     end_date = HiddenField()
 
     def init(self):
-        empty_option = OptionForm()
-        empty_option.value.data = 'Вариант ответа'
-        empty_option.is_answer.data = True
-        self.options.append_entry(empty_option)
+        self.options.append_entry()
 
     def fill_from_object(self, test):
         self.question.data = test.question
@@ -99,8 +96,8 @@ class TestForm(FlaskForm):
     def validate_publish_date(self, field):
         if field.data != '':
             date = datetime.strptime(field.data, '%d.%m.%Y')
-            start_date = datetime.strptime(self.start_date, '%d.%m.%Y')
-            end_date = datetime.strptime(self.end_date, '%d.%m.%Y')
+            start_date = datetime.strptime(self.start_date.data, '%d.%m.%Y')
+            end_date = datetime.strptime(self.end_date.data, '%d.%m.%Y')
             if date < start_date or date > end_date:
                 raise ValidationError('День публикации выходит за рамки виктрорины')
 
