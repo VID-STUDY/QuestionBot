@@ -6,6 +6,7 @@ from application import telegram_bot
 from telebot.apihelper import ApiException
 import re
 from datetime import datetime
+import settings
 
 
 class NewChannelForm(FlaskForm):
@@ -105,3 +106,10 @@ class TestForm(FlaskForm):
         answers = list(filter(lambda option: option.is_answer, field.entries))
         if len(answers) == 0:
             raise ValidationError('Вы не выбрали правильный ответ')
+
+
+class SettingsForm(FlaskForm):
+    right_answer_point = StringField("Очков за правильный ответ", validators=[DataRequired()])
+
+    def fill_from_settings(self):
+        self.right_answer_point.data = settings.get_right_answer_points()
