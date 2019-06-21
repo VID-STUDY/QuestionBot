@@ -16,6 +16,8 @@ def publish_rating():
 
 def publish_test(test_id: int):
     test = Test.get_by_id(test_id)
+    if test.published:
+        return
     channel_chat_id = test.quiz.channel.chat_id
     test_message = strings.from_test(test)
     keyboard = keyboards.from_test_options(test.options.all())
