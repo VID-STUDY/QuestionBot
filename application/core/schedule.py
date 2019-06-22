@@ -1,7 +1,7 @@
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.date import DateTrigger
 from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.jobstores.base import ConflictingIdError, JobLookupError
+from apscheduler.jobstores.base import JobLookupError
 from datetime import datetime
 from config import Config
 
@@ -12,10 +12,7 @@ _rating_trigger = CronTrigger(day_of_week='sun', hour=12, timezone='Asia/Tashken
 _scheduler = BackgroundScheduler()
 _scheduler.add_jobstore('sqlalchemy', url=Config.SQLALCHEMY_DATABASE_URI)
 _scheduler.start()
-try:
-    _scheduler.add_job(publishing.publish_rating, _rating_trigger, id='rating')
-except ConflictingIdError:
-    pass
+_scheduler.add_job(publishing.publish_rating, _rating_trigger, id='rating', replace_existing=True)
 
 
 def add_test_to_publish(test_id: int, date_time: datetime):
@@ -40,6 +37,7 @@ def update_test_date_publish(test_id: int, date_time: datetime):
 
 def stop_all_jobs():
     _scheduler.remove_all_jobs()
+    _scheduler.pause()
 
 
 def pause_scheduler():
@@ -48,4 +46,7 @@ def pause_scheduler():
 
 def resume_scheduler():
     _scheduler.resume()
-    _scheduler.add_job(publishing.publish_rating, _rating_trigger, replace_existing=True)
+
+
+def start_scheduler():
+    _scheduler.add_job(publishing.publish_rating, _rating_trigger, replace_existing=True, id='rating')
