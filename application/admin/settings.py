@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, flash
 from flask_login import login_required
 from .forms import SettingsForm
 import settings as app_settings
+from application.core import schedule
 
 
 @bp.route('/settings', methods=['GET', 'POST'])
@@ -17,3 +18,31 @@ def settings():
     form.fill_from_settings()
     bot_state = app_settings.get_bot_state()
     return render_template('admin/settings.html', form=form, bot_state=bot_state)
+
+
+@bp.route('/settings/bot/start', methods=['GET'])
+@login_required
+def start_bot():
+    current_bot_state = app_settings.get_bot_state()
+    if current_bot_state == app_settings.BotStates.PAUSED:
+        schedule.resume_scheduler()
+    else:
+        schedule.start_scheduler()
+    app_settings.set_bot_state(app_settings.BotStates.WORK)
+    return redirect(url_for('admin.settings'))
+
+
+@bp.route('/settings/bot/pause', methods=['GET'])
+@login_required
+def pause_bot():
+    schedule.pause_scheduler()
+    app_settings.set_bot_state(app_settings.BotStates.PAUSED)
+    return redirect(url_for('admin.settings'))
+
+
+@bp.route('/settings/bot/stop', methods=['GET'])
+@login_required
+def stop_bot():
+    schedule.stop_all_jobs()
+    app_settings.set_bot_state(app_settings.BotStates.STOPPED)
+    return redirect(url_for('admin.settings'))

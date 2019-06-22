@@ -47,13 +47,13 @@
             <section class="bot-actions">
                 <h4 class="text-primary">Управление ботом</h4>
                 <div class="d-flex justify-content-around align-items-center mb-20 flex-wrap">
-                    <a href="#" class="btn btn-lg btn-alt-primary {% if bot_state == 'work' %}disabled{% endif %}" data-toggle="popover" title="Запустить бота" data-position="top" data-content="Если бот был поставлен на паузу, публикация тестов продолжиться">
+                    <a href="{{ url_for('admin.start_bot') }}" class="btn btn-lg btn-alt-primary {% if bot_state == 'work' %}disabled{% endif %}" data-toggle="popover" title="Запустить бота" data-position="top" data-content="Если бот был поставлен на паузу, публикация тестов продолжиться">
                         <i class="si si-control-play"></i> Запустить
                     </a>
-                    <a href="#" class="btn btn-lg btn-alt-warning {% if bot_state == 'paused' %}disabled{% endif %}" data-toggle="popover" title="Поставить на паузу" data-position="top" data-content="При установке на паузу, бот перенстанет отвечать пользователям и сохранит запланированные публикации тестов">
+                    <a href="{{ url_for('admin.pause_bot') }}" class="btn btn-lg btn-alt-warning {% if bot_state == 'paused' %}disabled{% endif %}" data-toggle="popover" title="Поставить на паузу" data-position="top" data-content="При установке на паузу, бот перенстанет отвечать пользователям и сохранит запланированные публикации тестов">
                         <i class="si si-control-pause"></i> Пауза
                     </a>
-                    <a href="#" class="btn btn-lg btn-alt-danger {% if bot_state == 'stopped' %}disabled{% endif %}" data-toggle="popover" title="Остановить бота" data-position="top" data-content="Внимание! Остановка бота приведёт к удалению всех запланированных публикаций тестов, но сохранит сами тесты и перестанет отвечать пользователям">
+                    <a href="{{ url_for('admin.stop_bot') }}" class="btn btn-lg btn-alt-danger {% if bot_state == 'stopped' %}disabled{% endif %}" data-toggle="popover" title="Остановить бота" data-position="top" data-content="Внимание! Остановка бота приведёт к удалению всех запланированных публикаций тестов, но сохранит сами тесты и перестанет отвечать пользователям">
                         <i class="fa fa-stop"></i> Стоп
                     </a>
                 </div>
