@@ -10,7 +10,7 @@ from application.bot import publishing
 
 _rating_trigger = CronTrigger(day_of_week='sun', hour=12, timezone='Asia/Tashkent')
 _scheduler = BackgroundScheduler()
-_scheduler.add_jobstore('sqlalchemy', url=Config.SQLALCHEMY_DATABASE_URI)
+_scheduler.add_jobstore('sqlalchemy', url=Config.APSCHEDULER_DATABASE_URI)
 _scheduler.start()
 _scheduler.add_job(publishing.publish_rating, _rating_trigger, id='rating', replace_existing=True)
 

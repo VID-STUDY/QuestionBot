@@ -16,6 +16,7 @@ class Config:
     WEBHOOK_SSL_CERT = '/home/telegrambot/certs/cert.pem'
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+    APSCHEDULER_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'apsdb.sqlite3')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('SECRET_KEY')
     UPLOAD_FOLDER = os.path.join(basedir, 'data')
