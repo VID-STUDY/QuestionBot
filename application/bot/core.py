@@ -21,7 +21,11 @@ def answer_handler(query: CallbackQuery):
     option_id = data[1]
     user = query.from_user
     channel_id = query.message.chat.id
-    answers_processor(test_id, option_id, user, channel_id, query)
+    try:
+        answers_processor(test_id, option_id, user, channel_id, query)
+    except Exception as e:
+        telegram_bot.answer_callback_query(query.id, strings.get_string('answer.error'))
+        raise e
 
 
 def answers_processor(test_id, option_id, user: User, channel_chat_id, query: CallbackQuery):
@@ -49,7 +53,8 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     now_utc = datetime.utcnow()
     quiz_date = test.quiz.end_date
     local_date = date.convert_utc_to_asia_tz(now_utc)
-    if datetime(local_date.year, local_date.month, local_date.day) > datetime(quiz_date.year, quiz_date.month, quiz_date.day):
+    if datetime(local_date.year, local_date.month, local_date.day) > datetime(quiz_date.year, quiz_date.month,
+                                                                              quiz_date.day):
         message = strings.get_string('answer.quiz_already_ended')
         telegram_bot.answer_callback_query(query.id, message, show_alert=True)
         return
