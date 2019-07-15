@@ -42,6 +42,9 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     current_user = BotUser.add_user(user.id, user.first_name, user.last_name, user.username)
     channel.add_member(current_user)
     test = Test.get_by_id(test_id)
+    if not test:
+        telegram_bot.answer_callback_query(query.id, strings.get_string('answer.test_not_found'))
+        return
     # Check if user given an answer for current quiz
     now_utc = datetime.utcnow()
     quiz_date = test.quiz.end_date

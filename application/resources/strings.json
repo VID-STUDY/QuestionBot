@@ -3,5 +3,6 @@
     "answer.right_answer_on_the_not_first_try": "Вы ответили правильно с {} попытки, но не получаете баллов \uD83D\uDE0C",
     "answer.already_given": "Вы уже дали правильный ответ на этот вопрос",
     "answer.wrong_answer": "Вы дали не правильный ответ ☹️",
-    "answer.quiz_already_ended": "К сожалению, викторина с этим вопросом уже прошла ☹"
+    "answer.quiz_already_ended": "К сожалению, викторина с этим вопросом уже прошла ☹",
+    "answer.test_not_found": "Этот тест уже удалён"
 }
