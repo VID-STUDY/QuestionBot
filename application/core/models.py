@@ -69,6 +69,10 @@ class BotUser(db.Model):
         else:
             return None, None
 
+    @staticmethod
+    def get_by_id(user_id: int):
+        return BotUser.query.get(user_id)
+
     def get_answers_by_channel_id(self, channel_id: int):
         return self.answers.filter(Answer.channel_id == channel_id).all()
 
