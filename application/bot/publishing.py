@@ -1,5 +1,5 @@
 from application import telegram_bot
-from application.core.models import Test, Channel, Answer
+from application.core.models import Test, Channel, Answer, BotUser
 from application.resources import strings, keyboards
 import os
 
@@ -10,7 +10,16 @@ def publish_rating():
         quiz = channel.get_current_quiz()
         if quiz:
             user_points = Answer.get_summary_user_points_by_channel_and_period(quiz.id, quiz.top_count)
-            rating_message = strings.from_user_points_rating(user_points, quiz.start_date, quiz.end_date)
+            username_points = []
+            for user_point in user_points:
+                user = BotUser.get_by_id(user_point[0])
+                username = user.first_name
+                if user.last_name:
+                    username += " %s" % user.last_name
+                if user.username:
+                    username += " - %s" % user.username
+                username_points.append((username, user_point[1]))
+            rating_message = strings.from_user_points_rating(username_points, quiz.start_date, quiz.end_date)
             telegram_bot.send_message(channel.chat_id, rating_message, parse_mode='HTML')
 
 
