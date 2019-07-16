@@ -32,7 +32,8 @@ def show_test(test_id: int, quiz_id: int):
         return redirect(url_for('admin.quizzes_tests', quiz_id=quiz_id))
     test = tests.get_by_id(test_id)
     quiz = quizzes.get_by_id(quiz_id)
-    answers = test.answers.filter(Answer.is_right == True, Answer.points != 0).order_by(Answer.created_at.desc()).all()
+    answers = test.answers.filter(Answer.is_right == True, Answer.points != 0).order_by(Answer.created_at.desc(),
+                                                                                        Answer.id.asc()).all()
     form.fill_from_object(test)
     return render_template('admin/test.html', form=form, test=test, quiz=quiz, answers=answers)
 

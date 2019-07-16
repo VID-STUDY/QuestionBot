@@ -348,7 +348,7 @@ class Answer(db.Model):
         from sqlalchemy.sql import text
         sql = text("""SELECT bot_user.username, SUM(a.points) points_sum FROM bot_user 
         LEFT JOIN answer a on bot_user.id = a.user_id 
-        WHERE a.quiz_id = :quiz_id GROUP BY bot_user.username ORDER BY points_sum DESC LIMIT :limit;""")
+        WHERE a.quiz_id = :quiz_id GROUP BY bot_user.username ORDER BY points_sum DESC, a.id LIMIT :limit;""")
         result = db.engine.execute(sql, quiz_id=quiz_id, limit=top_count)
         return [(row[0], row[1]) for row in result]
 
