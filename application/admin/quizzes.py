@@ -39,7 +39,7 @@ def remove_quiz(quiz_id: int, channel_id: int):
     return redirect(url_for('admin.channel_quizzes', channel_id=channel_id))
 
 
-@bp.route('channels/<int:channel_id>/<int:quiz_id>/ratings', methods=['GET'])
+@bp.route('/channels/<int:channel_id>/<int:quiz_id>/ratings', methods=['GET'])
 @login_required
 def quiz_ratings(channel_id: int, quiz_id: int):
     quiz = quizzes.get_by_id(quiz_id)
