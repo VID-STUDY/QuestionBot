@@ -3,7 +3,7 @@ from .forms import NewQuizForm
 from application.core.services import quizzes, channels
 from flask import render_template, url_for, redirect, flash, abort
 from flask_login import login_required
-from application.core.models import Channel, Quiz
+from application.core.models import Channel, Quiz, Answer, BotUser
 
 
 @bp.route('/channels/<int:channel_id>/quizzes', methods=['GET'])
@@ -37,3 +37,17 @@ def remove_quiz(quiz_id: int, channel_id: int):
     # TODO: Delete all scheduled jobs and files with tests in this quiz
     Quiz.remove(quiz_id)
     return redirect(url_for('admin.channel_quizzes', channel_id=channel_id))
+
+
+@bp.route('channels/<int:channel_id>/<int:quiz_id>/ratings', methods=['GET'])
+@login_required
+def quiz_ratings(channel_id: int, quiz_id: int):
+    quiz = quizzes.get_by_id(quiz_id)
+    users_ids__points = Answer.get_summary_user_points_by_channel_and_period(quiz_id, quiz.top_count)
+    users_points = []
+    for user_id__points in users_ids__points:
+        user_id = user_id__points[0]
+        points = user_id__points[1]
+        user = BotUser.get_by_id(user_id)
+        users_points.append((user, points))
+    return render_template('admin/ratings.html', users_points=users_points, quiz=quiz)
