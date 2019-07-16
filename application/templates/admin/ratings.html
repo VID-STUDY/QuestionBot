@@ -13,7 +13,7 @@
         </div>
         <div class="block-content block-content-full">
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover table-vcenter">
                     <thead>
                         <tr>
                             <th class="text-center text-primary">№</th>
@@ -26,7 +26,7 @@
                         {% for user_points in users_points %}
                             {% set user = user_points[0] %}
                             {% set points = user_points[1] %}
-                            <tr>
+                            <tr {% if loop.first %}class="table-primary"{% endif %}>
                                 <td class="text-center text-primary">{{ loop.index }}</td>
                                 <td class="text-center">
                                     {{ user.first_name }}{% if user.last_name %} {{ user.last_name }}{% endif %}
