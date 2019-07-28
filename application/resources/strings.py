@@ -24,6 +24,8 @@ def from_user_points_rating(user_points_list: List[Tuple[str, int]], start_date:
         .format(start_date.strftime(format_date_str),
                 end_date.strftime(format_date_str))
     rating_content += '\n\n'
+    counter = 1
     for user_points in user_points_list:
-        rating_content += '{} - {}\n'.format(user_points[0], user_points[1])
+        rating_content += '{}. {} - {}\n'.format(counter, user_points[0], user_points[1])
+        counter += 1
     return rating_content
