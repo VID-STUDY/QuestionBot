@@ -18,7 +18,7 @@ def create_test(question: str, publish_date: str, publish_time: str,
         test.options.append(option)
         db.session.add(option)
     if file and file.filename != '':
-        file_path = os.path.join(Config.UPLOAD_FOLDER, secure_filename(file.filename))
+        file_path = os.path.join(Config.UPLOAD_FOLDER, file.filename)
         files.save_file(file, file_path, recreate=True)
         test.file_path = file_path
     db.session.add(test)
@@ -43,7 +43,7 @@ def update_test(test_id: int, question: str, publish_date: str, publish_time: st
     if file and file.filename != '':
         if test.file_path:
             files.remove_file(test.file_path)
-        file_path = os.path.join(Config.UPLOAD_FOLDER, secure_filename(file.filename))
+        file_path = os.path.join(Config.UPLOAD_FOLDER, file.filename)
         files.save_file(file, file_path, recreate=True)
         test.file_path = file_path
     db.session.commit()
