@@ -47,7 +47,8 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     channel.add_member(current_user)
     test = Test.get_by_id(test_id)
     if not test:
-        telegram_bot.answer_callback_query(query.id, strings.get_string('answer.test_not_found'))
+        message = strings.get_string('answer.test_not_found')
+        _answer_callback_query_safely(query.id, message)
         return
     # Check if user given an answer for current quiz
     now_utc = datetime.utcnow()
@@ -56,12 +57,12 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     if datetime(local_date.year, local_date.month, local_date.day) > datetime(quiz_date.year, quiz_date.month,
                                                                               quiz_date.day):
         message = strings.get_string('answer.quiz_already_ended')
-        telegram_bot.answer_callback_query(query.id, message, show_alert=True)
+        _answer_callback_query_safely(query.id, message, show_alert=True)
         return
     if test.user_given_right_answer(user_id=current_user.id):
         # if user already given the right answer send message to him and stop processing
         message = strings.get_string('answer.already_given')
-        telegram_bot.answer_callback_query(query.id, message, show_alert=True)
+        _answer_callback_query_safely(query.id, message, show_alert=True)
         return
     right_answer = test.get_right_answer()
     # if user given right answer
@@ -85,7 +86,17 @@ def answers_processor(test_id, option_id, user: User, channel_chat_id, query: Ca
     answer = Answer(user_id=user.id, points=answer_points, channel_id=channel.id, is_right=answer_right,
                     quiz_id=test.quiz.id)
     test.add_answer(answer)
+    _answer_callback_query_safely(query.id, message, show_alert=True)
+
+
+def _answer_callback_query_safely(query_id, text, show_alert=None):
+    """
+    Answer callback query without throwing an exception
+    :param query_id: Callback query id
+    :param text: Text answer
+    :param show_alert: Show a popup alert
+    """
     try:
-        telegram_bot.answer_callback_query(query.id, message, show_alert=True)
+        telegram_bot.answer_callback_query(query_id, text, show_alert=show_alert)
     except ApiException:
         pass
